@@ -14,7 +14,7 @@ const updateTask = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
 
     // Проверяем, был ли предоставлен идентификатор задачи
     if (!taskId) {
-        return formatJSONResponse({ error: 'Task ID is required' });
+        return formatJSONResponse({ error: 'Task ID is required' }, 400);
     }
 
     // Парсим тело запроса для получения новых данных задачи
@@ -23,14 +23,14 @@ const updateTask = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
 
     // Проверяем, были ли предоставлены новые данные для задачи
     if (!title || !description) {
-        return formatJSONResponse({ error: 'Missing required fields' });
+        return formatJSONResponse({ error: 'Missing required fields' }, 400);
     }
 
     // TODO: Здесь должна быть логика обновления задачи в базе данных
 
     // Возвращаем успешный ответ с обновленными данными задачи
     const updatedTask: Task = { id: taskId, title, description };
-    return formatJSONResponse({ task: updatedTask });
+    return formatJSONResponse({ task: updatedTask }, 200);
 };
 
 export const main = updateTask;

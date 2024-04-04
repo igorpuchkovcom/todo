@@ -22,7 +22,7 @@ const getTasksHandler = async (_event: APIGatewayProxyEvent): Promise<APIGateway
         return acc;
     }, {});
 
-    return formatJSONResponse(tasksObject);
+    return formatJSONResponse(tasksObject, 200);
 };
 
 export const main = getTasksHandler;
