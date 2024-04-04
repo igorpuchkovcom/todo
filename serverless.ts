@@ -46,6 +46,30 @@ const serverlessConfiguration: AWS = {
     },
     resources: {
         Resources: {
+            UserPool: {
+                Type: 'AWS::Cognito::UserPool',
+                Properties: {
+                    UserPoolName: 'TodoUserPool',
+                    UsernameAttributes: ['email'],
+                    AutoVerifiedAttributes: ['email'],
+                    Policies: {
+                        PasswordPolicy: {
+                            MinimumLength: 8,
+                            RequireLowercase: true,
+                            RequireNumbers: true,
+                            RequireSymbols: true,
+                            RequireUppercase: true,
+                        },
+                    },
+                },
+            },
+            UserPoolClient: {
+                Type: 'AWS::Cognito::UserPoolClient',
+                Properties: {
+                    ClientName: 'TodoUserPoolClient',
+                    UserPoolId: { Ref: 'UserPool' },
+                },
+            },
             VPC: {
                 Type: 'AWS::EC2::VPC',
                 Properties: {
