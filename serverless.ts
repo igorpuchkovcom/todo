@@ -1,5 +1,10 @@
 import type {AWS} from '@serverless/typescript';
-import hello from '@functions/hello';
+import register from '@functions/auth/register';
+import login from '@functions/auth/login';
+import createTask from '@functions/tasks/create';
+import deleteTask from '@functions/tasks/delete';
+import getTasks from '@functions/tasks/get';
+import updateTask from '@functions/tasks/update';
 
 const serverlessConfiguration: AWS = {
     service: 'todo',
@@ -17,9 +22,14 @@ const serverlessConfiguration: AWS = {
             NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
         },
     },
-    // import the function via paths
+    // import the functions via paths
     functions: {
-        hello
+        register,
+        login,
+        createTask,
+        deleteTask,
+        getTasks,
+        updateTask,
     },
     package: {individually: true},
     custom: {
