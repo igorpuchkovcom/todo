@@ -1,5 +1,4 @@
 import type {AWS} from '@serverless/typescript';
-
 import hello from '@functions/hello';
 
 const serverlessConfiguration: AWS = {
@@ -19,7 +18,9 @@ const serverlessConfiguration: AWS = {
         },
     },
     // import the function via paths
-    functions: {hello},
+    functions: {
+        hello
+    },
     package: {individually: true},
     custom: {
         esbuild: {
@@ -31,7 +32,7 @@ const serverlessConfiguration: AWS = {
             define: {'require.resolve': undefined},
             platform: 'node',
             concurrency: 10,
-        }
+        },
     },
     resources: {
         Resources: {
@@ -40,35 +41,31 @@ const serverlessConfiguration: AWS = {
                 Properties: {
                     CidrBlock: '10.0.0.0/16',
                     InstanceTenancy: 'default',
-                }
+                },
             },
             Subnet1: {
                 Type: 'AWS::EC2::Subnet',
                 Properties: {
                     AvailabilityZone: 'us-east-1a',
                     CidrBlock: '10.0.64.0/18',
-                    VpcId: {Ref: 'VPC'}
-                }
+                    VpcId: {Ref: 'VPC'},
+                },
             },
             Subnet2: {
                 Type: 'AWS::EC2::Subnet',
                 Properties: {
                     AvailabilityZone: 'us-east-1b',
                     CidrBlock: '10.0.128.0/18',
-                    VpcId: {Ref: 'VPC'}
-                }
+                    VpcId: {Ref: 'VPC'},
+                },
             },
             DbSubnetGroup: {
                 Type: 'AWS::RDS::DBSubnetGroup',
                 Properties: {
                     DBSubnetGroupName: 'PrivateDbSubnet',
                     DBSubnetGroupDescription: 'PrivateDbSubnet',
-                    SubnetIds:
-                        [
-                            {Ref: 'Subnet1'},
-                            {Ref: 'Subnet2'},
-                        ],
-                }
+                    SubnetIds: [{Ref: 'Subnet1'}, {Ref: 'Subnet2'}],
+                },
             },
             DatabaseVpcSecurityGroup: {
                 Type: 'AWS::EC2::SecurityGroup',
@@ -81,15 +78,15 @@ const serverlessConfiguration: AWS = {
                         FromPort: '27017',
                         ToPort: '27017',
                     },
-                    VpcId: {Ref: 'VPC'}
-                }
+                    VpcId: {Ref: 'VPC'},
+                },
             },
             DBInstance: {
                 Type: 'AWS::DocDB::DBInstance',
                 Properties: {
                     DBInstanceClass: 'db.t3.medium',
                     DBClusterIdentifier: {Ref: 'DocumentDBCluster'},
-                }
+                },
             },
             DocumentDBCluster: {
                 Type: 'AWS::DocDB::DBCluster',
@@ -99,7 +96,7 @@ const serverlessConfiguration: AWS = {
                     DBSubnetGroupName: {Ref: 'DbSubnetGroup'},
                     AvailabilityZones: ['us-east-1a', 'us-east-1b'],
                     StorageEncrypted: true,
-                    VpcSecurityGroupIds: [{Ref: 'DatabaseVpcSecurityGroup'}]
+                    VpcSecurityGroupIds: [{Ref: 'DatabaseVpcSecurityGroup'}],
                 },
             },
         },
