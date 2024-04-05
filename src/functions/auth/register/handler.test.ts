@@ -1,5 +1,16 @@
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { CognitoIdentityServiceProvider } from 'aws-sdk';
+
+jest.mock('aws-sdk', () => {
+    const mCognito = {
+        signUp: jest.fn().mockReturnThis(), // Мок signUp
+        promise: jest.fn().mockResolvedValue({ UserSub: '123456789' }), // Мок promise
+    };
+    return {
+        CognitoIdentityServiceProvider: jest.fn(() => mCognito), // Мок CognitoIdentityServiceProvider
+    };
+});
 
 describe('Register API Endpoint', () => {
     it('should return success response on valid input', async () => {
@@ -22,6 +33,11 @@ describe('Register API Endpoint', () => {
             resource: ''
         };
 
+        const mockSignUp = jest.fn().mockResolvedValue({ UserSub: '123456789' });
+        (CognitoIdentityServiceProvider as any).mockImplementation(() => ({
+            signUp: mockSignUp,
+        }));
+
         const response = await main(event);
 
         expect(response.statusCode).toEqual(200);
@@ -30,7 +46,7 @@ describe('Register API Endpoint', () => {
         expect(responseBody).toHaveProperty('message');
         expect(responseBody.message).toEqual('User registration successful');
         expect(responseBody).toHaveProperty('user');
-        expect(responseBody.user).toHaveProperty('id');
+        expect(responseBody.user).toHaveProperty('id', '123456789');
         expect(responseBody.user).toHaveProperty('username', 'testUser');
         expect(responseBody.user).toHaveProperty('email', 'test@example.com');
     });
