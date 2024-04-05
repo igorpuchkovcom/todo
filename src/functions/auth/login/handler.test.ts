@@ -1,6 +1,36 @@
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
+jest.mock('aws-sdk', () => {
+    const successfulAuthMock = {
+        promise: jest.fn().mockResolvedValue({
+            AuthenticationResult: {
+                AccessToken: 'mocked_access_token',
+            },
+        }),
+    };
+
+    const failedAuthMock = {
+        promise: jest.fn().mockImplementation(() => {
+            throw { code: 'NotAuthorizedException' };
+        }),
+    };
+
+    const mCognito = {
+        initiateAuth: jest.fn().mockImplementation((params: any) => {
+            if (params.AuthParameters.PASSWORD === 'wrongPassword') {
+                return failedAuthMock;
+            } else {
+                return successfulAuthMock;
+            }
+        }),
+    };
+
+    return {
+        CognitoIdentityServiceProvider: jest.fn(() => mCognito),
+    };
+});
+
 describe('Login API Endpoint', () => {
     it('should return success response on valid credentials', async () => {
         // Тестовые данные для валидного входа
@@ -22,6 +52,7 @@ describe('Login API Endpoint', () => {
             resource: ''
         };
 
+        // Вызываем обработчик и ожидаем успешного ответа
         const response = await main(event);
 
         // Проверка успешного ответа
@@ -29,7 +60,7 @@ describe('Login API Endpoint', () => {
         expect(typeof response.body).toEqual('string');
         const responseBody = JSON.parse(response.body);
         expect(responseBody).toHaveProperty('message', 'Login successful');
-        expect(responseBody).toHaveProperty('token');
+        expect(responseBody).toHaveProperty('token', 'mocked_access_token');
     });
 
     it('should return error response on invalid credentials', async () => {
@@ -52,6 +83,7 @@ describe('Login API Endpoint', () => {
             resource: ''
         };
 
+        // Вызываем обработчик и ожидаем ошибочного ответа
         const response = await main(event);
 
         // Проверка ошибочного ответа
