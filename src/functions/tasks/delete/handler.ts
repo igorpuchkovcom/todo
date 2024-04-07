@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { formatJSONResponse } from '../../../libs/api-gateway';
+import { deleteTaskFromDatabase } from '../../../database';
 
 // Обработчик для API endpoint
 const deleteTaskHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -10,11 +11,29 @@ const deleteTaskHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewa
         }, 400);
     }
 
-    // TODO: Реализовать здесь логику для удаления задачи
-    // TODO: А пока просто возвращаем успешный ответ
-    return formatJSONResponse({
-        message: 'Task deleted successfully'
-    }, 200);
+    // Получаем идентификатор задачи из параметров пути
+    const taskId = event.pathParameters.id;
+
+    try {
+        // Параметры подключения к базе данных
+        const config = {
+            databaseName: process.env.DOCUMENTDB_DATABASE,
+            uri: process.env.DOCUMENTDB_URI
+        };
+
+        // Удаляем задачу из базы данных
+        await deleteTaskFromDatabase(taskId, config);
+
+        // Возвращаем успешный ответ
+        return formatJSONResponse({
+            message: 'Task deleted successfully'
+        }, 200);
+    } catch (error) {
+        // Возвращаем ошибку сервера
+        return formatJSONResponse({
+            error: 'Internal server error'
+        }, 500);
+    }
 };
 
 export const main = deleteTaskHandler;
