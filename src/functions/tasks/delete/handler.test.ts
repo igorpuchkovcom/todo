@@ -2,6 +2,11 @@
 
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { deleteTaskFromDatabase } from '../../../database';
+
+jest.mock('../../../database', () => ({
+    deleteTaskFromDatabase: jest.fn(), // Создаем мок функции удаления задачи из базы данных
+}));
 
 describe('Delete Task API Endpoint', () => {
     it('should delete an existing task', async () => {
@@ -21,9 +26,13 @@ describe('Delete Task API Endpoint', () => {
             resource: ''
         };
 
+        // Вызываем обработчик события
         const response = await main(event);
 
-        // Проверка успешного ответа
+        // Проверяем, что функция удаления задачи из базы данных была вызвана с правильным аргументом
+        expect(deleteTaskFromDatabase).toHaveBeenCalledWith('taskId123', expect.anything());
+
+        // Проверяем успешный ответ
         expect(response.statusCode).toEqual(200);
         expect(typeof response.body).toEqual('string');
     });
@@ -45,9 +54,10 @@ describe('Delete Task API Endpoint', () => {
             resource: ''
         };
 
+        // Вызываем обработчик события
         const response = await main(event);
 
-        // Проверка ошибочного ответа
+        // Проверяем ошибочный ответ
         expect(response.statusCode).toEqual(400);
         expect(typeof response.body).toEqual('string');
         const responseBody = JSON.parse(response.body);
