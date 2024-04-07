@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { formatJSONResponse } from '../../../libs/api-gateway';
 import {insertTaskIntoDatabase} from '../../../database';
