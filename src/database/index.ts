@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb';
+import {MongoClient, ObjectId} from 'mongodb';
 
 interface DatabaseConfig {
     databaseName: string;
@@ -40,6 +40,25 @@ export async function deleteTaskFromDatabase(taskId: string, config: DatabaseCon
 
         // Удаляем задачу из коллекции по её идентификатору
         await tasksCollection.deleteOne({ _id: objectId });
+    } finally {
+        // Всегда закрываем соединение с базой данных после завершения операции
+        await client.close();
+    }
+}
+
+// Функция для получения всех задач из базы данных
+export async function getAllTasksFromDatabase(config: DatabaseConfig): Promise<any[]> {
+    const { databaseName, uri } = config;
+    const client = new MongoClient(uri);
+
+    try {
+        await client.connect();
+
+        const database = client.db(databaseName);
+        const tasksCollection = database.collection('tasks');
+
+        // Получаем все задачи из коллекции tasks
+        return await tasksCollection.find({}).toArray();
     } finally {
         // Всегда закрываем соединение с базой данных после завершения операции
         await client.close();
