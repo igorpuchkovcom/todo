@@ -14,7 +14,7 @@ export const loginHandler = async (event: APIGatewayProxyEvent): Promise<APIGate
             // Пытаемся инициировать аутентификацию через Cognito
             const signInResponse = await cognito.initiateAuth({
                 AuthFlow: 'USER_PASSWORD_AUTH',
-                ClientId: process.env.COGNITO_CLIENT_ID,
+                ClientId: process.env.UserPoolClientId,
                 AuthParameters: {
                     USERNAME: requestBody.email,
                     PASSWORD: requestBody.password

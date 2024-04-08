@@ -13,7 +13,7 @@ export const registerHandler = async (event: APIGatewayProxyEvent): Promise<APIG
         try {
             // Регистрируем пользователя в Cognito
             const signUpResponse: CognitoIdentityServiceProvider.SignUpResponse = await cognito.signUp({
-                ClientId: process.env.COGNITO_CLIENT_ID,
+                ClientId: process.env.UserPoolClientId,
                 Username: requestBody.username,
                 Password: requestBody.password,
                 UserAttributes: [{Name: 'email', Value: requestBody.email}]
