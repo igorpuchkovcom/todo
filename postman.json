@@ -1,0 +1,264 @@
+{
+  "info": {
+    "_postman_id": "9f554dc2-7c69-4fe9-9e7b-b61e828738fb",
+    "name": "ToDo API Collection",
+    "description": "Collection of API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32808336"
+  },
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"user@example.com\", \"password\": \"P@ssWord123\", \"email\": \"user@example.com\"}"
+        },
+        "url": {
+          "raw": "{{ServiceEndpoint}}/register",
+          "host": [
+            "{{ServiceEndpoint}}"
+          ],
+          "path": [
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"user@example.com\", \"password\": \"P@ssWord123\"}"
+        },
+        "url": {
+          "raw": "{{ServiceEndpoint}}/login",
+          "host": [
+            "{{ServiceEndpoint}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Confirm User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"code\": \"123456\", \"username\": \"user@example.com\"}"
+        },
+        "url": {
+          "raw": "{{ServiceEndpoint}}/auth/confirm",
+          "host": [
+            "{{ServiceEndpoint}}"
+          ],
+          "path": [
+            "auth",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Task",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"Task Title\", \"description\": \"Task Description\"}"
+        },
+        "url": {
+          "raw": "{{ServiceEndpoint}}/tasks/create",
+          "host": [
+            "{{ServiceEndpoint}}"
+          ],
+          "path": [
+            "tasks",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Task",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"taskId\": \"123456\"}"
+        },
+        "url": {
+          "raw": "{{ServiceEndpoint}}/tasks/delete",
+          "host": [
+            "{{ServiceEndpoint}}"
+          ],
+          "path": [
+            "tasks",
+            "delete"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Tasks",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{ServiceEndpoint}}/tasks/get",
+          "host": [
+            "{{ServiceEndpoint}}"
+          ],
+          "path": [
+            "tasks",
+            "get"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Task",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"taskId\": \"123456\", \"title\": \"Updated Task Title\", \"description\": \"Updated Task Description\"}"
+        },
+        "url": {
+          "raw": "{{ServiceEndpoint}}/tasks/update",
+          "host": [
+            "{{ServiceEndpoint}}"
+          ],
+          "path": [
+            "tasks",
+            "update"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "ServiceEndpoint",
+      "value": ""
+    }
+  ]
+}
