@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { formatJSONResponse } from '../../../libs/api-gateway';
+import { getAllTasksFromDatabase } from '../../../database';
 
 interface Task {
     id: string;
@@ -9,20 +10,30 @@ interface Task {
 
 // Обработчик для API endpoint
 const getTasksHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // TODO: Реализовать здесь логику для получения списка задач
-    // TODO: А пока просто возвращаем список задач для демонстрации
-    const tasks: Task[] = [
-        { id: '1', title: 'Task 1', description: 'Description for Task 1' },
-        { id: '2', title: 'Task 2', description: 'Description for Task 2' }
-    ];
+    try {
+        // Параметры подключения к базе данных
+        const config = {
+            databaseName: process.env.DOCUMENTDB_DATABASE,
+            uri: process.env.DOCUMENTDB_URI
+        };
 
-    // Преобразование массива задач в объект
-    const tasksObject = tasks.reduce((acc, task) => {
-        acc[task.id] = task;
-        return acc;
-    }, {});
+        // Получаем все задачи из базы данных
+        const tasks: Task[] = await getAllTasksFromDatabase(config);
 
-    return formatJSONResponse(tasksObject, 200);
+        // Преобразуем массив задач в объект, где ключами будут идентификаторы задач
+        const tasksObject = tasks.reduce((acc, task) => {
+            acc[task.id] = task;
+            return acc;
+        }, {});
+
+        // Возвращаем успешный ответ с объектом задач
+        return formatJSONResponse(tasksObject, 200);
+    } catch (error) {
+        // Возвращаем ошибку сервера
+        return formatJSONResponse({
+            error: 'Internal server error'
+        }, 500);
+    }
 };
 
 export const main = getTasksHandler;
