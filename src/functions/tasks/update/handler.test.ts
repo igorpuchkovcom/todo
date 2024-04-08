@@ -1,5 +1,10 @@
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { updateTaskInDatabase } from '../../../database';
+
+jest.mock('../../../database', () => ({
+    updateTaskInDatabase: jest.fn(), // Создаем мок функции обновления задачи в базе данных
+}));
 
 describe('Update Task API Endpoint', () => {
     it('should update an existing task', async () => {
@@ -23,6 +28,16 @@ describe('Update Task API Endpoint', () => {
         };
 
         const response = await main(event);
+
+        // Проверяем, что функция обновления задачи в базе данных была вызвана с правильными аргументами
+        expect(updateTaskInDatabase).toHaveBeenCalledWith(
+            'taskId123',
+            { title: 'Updated Task', description: 'This is an updated task' },
+            {
+                databaseName: process.env.DOCUMENTDB_DATABASE,
+                uri: process.env.DOCUMENTDB_URI
+            }
+        );
 
         // Проверка успешного ответа
         expect(response.statusCode).toEqual(200);
