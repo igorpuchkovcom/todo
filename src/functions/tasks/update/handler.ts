@@ -2,7 +2,7 @@
 
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {formatJSONResponse} from '../../../libs/api-gateway';
-import {updateTaskInDatabase} from '../../../database';
+import {updateTaskInDatabase} from '../../../infrastructure/database';
 import {DatabaseConfig} from '../../../types/database';
 
 interface Task {

@@ -1,9 +1,9 @@
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { getAllTasksFromDatabase } from '../../../database';
+import { getAllTasksFromDatabase } from '../../../infrastructure/database';
 
 // Mock the database module
-jest.mock('../../../database', () => ({
+jest.mock('../../../infrastructure/database', () => ({
     getAllTasksFromDatabase: jest.fn()
 }));
 

@@ -2,9 +2,9 @@
 
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { deleteTaskFromDatabase } from '../../../database';
+import { deleteTaskFromDatabase } from '../../../infrastructure/database';
 
-jest.mock('../../../database', () => ({
+jest.mock('../../../infrastructure/database', () => ({
     deleteTaskFromDatabase: jest.fn(), // Создаем мок функции удаления задачи из базы данных
 }));
 

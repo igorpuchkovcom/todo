@@ -1,8 +1,8 @@
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { updateTaskInDatabase } from '../../../database';
+import { updateTaskInDatabase } from '../../../infrastructure/database';
 
-jest.mock('../../../database', () => ({
+jest.mock('../../../infrastructure/database', () => ({
     updateTaskInDatabase: jest.fn(), // Создаем мок функции обновления задачи в базе данных
 }));
 

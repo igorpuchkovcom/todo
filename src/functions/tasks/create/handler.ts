@@ -1,6 +1,6 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {formatJSONResponse} from '../../../libs/api-gateway';
-import {insertTaskIntoDatabase} from '../../../database';
+import {insertTaskIntoDatabase} from '../../../infrastructure/database';
 import {DatabaseConfig} from '../../../types/database';
 
 // Конфигурация базы данных

@@ -1,8 +1,8 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { main } from './handler'; // Импортируем обработчик, который мы хотим протестировать
-import { insertTaskIntoDatabase } from '../../../database'; // Импортируем функцию вставки задачи в базу данных
+import { insertTaskIntoDatabase } from '../../../infrastructure/database'; // Импортируем функцию вставки задачи в базу данных
 
-jest.mock('../../../database', () => ({
+jest.mock('../../../infrastructure/database', () => ({
     insertTaskIntoDatabase: jest.fn(), // Создаем мок функции вставки задачи в базу данных
 }));
 
