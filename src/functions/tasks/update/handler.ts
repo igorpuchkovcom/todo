@@ -1,5 +1,3 @@
-// src/functions/tasks/update/handler.ts
-
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {formatJSONResponse} from '../../../libs/api-gateway';
 import {updateTaskInDatabase} from '../../../infrastructure/database';

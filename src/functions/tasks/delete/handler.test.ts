@@ -1,5 +1,3 @@
-// src/functions/tasks/delete/handler.test.ts
-
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { deleteTaskFromDatabase } from '../../../infrastructure/database';
