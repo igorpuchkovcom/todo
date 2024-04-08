@@ -1,13 +1,7 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {formatJSONResponse} from '../../../libs/api-gateway';
 import {insertTaskIntoDatabase} from '../../../infrastructure/database';
-import {DatabaseConfig} from '../../../types/database';
-
-// Конфигурация базы данных
-const config: DatabaseConfig = {
-    databaseName: 'todo',
-    uri: 'mongodb://' + process.env.DocumentDBHost
-};
+import config from '../../../../config/database-config';
 
 // Проверка наличия обязательных полей в запросе
 const validateRequestBody = (body: any): boolean => {

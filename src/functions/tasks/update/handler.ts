@@ -1,19 +1,13 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {formatJSONResponse} from '../../../libs/api-gateway';
 import {updateTaskInDatabase} from '../../../infrastructure/database';
-import {DatabaseConfig} from '../../../types/database';
+import config from '../../../../config/database-config';
 
 interface Task {
     id: string;
     title: string;
     description: string;
 }
-
-// Конфигурация базы данных
-const config: DatabaseConfig = {
-    databaseName: 'todo',
-    uri: 'mongodb://' + process.env.DocumentDBHost
-};
 
 // Функция для обновления задачи
 const updateTaskHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
