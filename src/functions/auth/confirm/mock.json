@@ -1,0 +1,6 @@
+{
+  "queryStringParameters": {
+    "code": "123456",
+    "username": "user@example.com"
+  }
+}
