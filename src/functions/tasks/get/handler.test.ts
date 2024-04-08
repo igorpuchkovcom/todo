@@ -22,7 +22,7 @@ describe('Get Tasks API Endpoint', () => {
         const event: APIGatewayProxyEvent = {
             body: '',
             httpMethod: 'GET',
-            path: '/api/tasks/get',
+            path: '/tasks/get',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,
             pathParameters: null,

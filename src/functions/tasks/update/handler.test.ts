@@ -14,7 +14,7 @@ describe('Update Task API Endpoint', () => {
                 title: 'Updated Task',
                 description: 'This is an updated task'
             }),
-            path: '/api/tasks/update',
+            path: '/tasks/update',
             httpMethod: 'PUT',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,
@@ -51,7 +51,7 @@ describe('Update Task API Endpoint', () => {
                 title: 'Updated Task',
                 description: 'This is an updated task'
             }),
-            path: '/api/tasks/update',
+            path: '/tasks/update',
             httpMethod: 'PUT',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,

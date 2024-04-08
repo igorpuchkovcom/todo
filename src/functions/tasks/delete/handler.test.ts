@@ -14,7 +14,7 @@ describe('Delete Task API Endpoint', () => {
         const event: APIGatewayProxyEvent = {
             body: '',
             httpMethod: 'DELETE',
-            path: '/api/tasks/delete',
+            path: '/tasks/delete',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,
             pathParameters: { id: 'taskId123' }, // Здесь taskId123 - это идентификатор существующей задачи
@@ -42,7 +42,7 @@ describe('Delete Task API Endpoint', () => {
         const event: APIGatewayProxyEvent = {
             body: '',
             httpMethod: 'DELETE',
-            path: '/api/tasks/delete',
+            path: '/tasks/delete',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,
             pathParameters: null,

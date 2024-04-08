@@ -40,7 +40,7 @@ describe('Login API Endpoint', () => {
                 password: 'testPassword'
             }),
             httpMethod: 'POST',
-            path: '/api/auth/login',
+            path: '/auth/login',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,
             pathParameters: null,
@@ -70,7 +70,7 @@ describe('Login API Endpoint', () => {
                 email: 'test@example.com',
                 password: 'wrongPassword'
             }),
-            path: '/api/auth/login',
+            path: '/auth/login',
             httpMethod: 'POST',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,

@@ -20,7 +20,7 @@ describe('Register API Endpoint', () => {
                 email: 'test@example.com',
                 password: 'testPassword'
             }),
-            path: '/api/auth/register',
+            path: '/auth/register',
             httpMethod: 'POST',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,
@@ -57,7 +57,7 @@ describe('Register API Endpoint', () => {
                 username: 'testUser',
                 email: 'test@example.com'
             }),
-            path: '/api/auth/register',
+            path: '/auth/register',
             httpMethod: 'POST',
             queryStringParameters: null,
             multiValueQueryStringParameters: null,
