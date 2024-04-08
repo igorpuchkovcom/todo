@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { formatJSONResponse } from '../../../libs/api-gateway';
+import { updateTaskInDatabase } from '../../../database'; // Подключаем функцию для обновления задачи в базе данных
 
 interface Task {
     id: string;
@@ -26,11 +27,23 @@ const updateTask = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyR
         return formatJSONResponse({ error: 'Missing required fields' }, 400);
     }
 
-    // TODO: Здесь должна быть логика обновления задачи в базе данных
+    try {
+        // Параметры подключения к базе данных
+        const config = {
+            databaseName: process.env.DOCUMENTDB_DATABASE,
+            uri: process.env.DOCUMENTDB_URI
+        };
 
-    // Возвращаем успешный ответ с обновленными данными задачи
-    const updatedTask: Task = { id: taskId, title, description };
-    return formatJSONResponse({ task: updatedTask }, 200);
+        // Обновляем задачу в базе данных
+        await updateTaskInDatabase(taskId, { title, description }, config);
+
+        // Возвращаем успешный ответ с обновленными данными задачи
+        const updatedTask: Task = { id: taskId, title, description };
+        return formatJSONResponse({ task: updatedTask }, 200);
+    } catch (error) {
+        // Возвращаем ошибку сервера
+        return formatJSONResponse({ error: 'Internal server error' }, 500);
+    }
 };
 
 export const main = updateTask;
