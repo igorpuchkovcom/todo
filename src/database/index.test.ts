@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongoClient, ObjectId } from 'mongodb';
-import { insertTaskIntoDatabase, deleteTaskFromDatabase, getAllTasksFromDatabase } from './index';
+import { insertTaskIntoDatabase, deleteTaskFromDatabase, getAllTasksFromDatabase, updateTaskInDatabase } from './index';
 
 describe('insertTaskIntoDatabase', () => {
     let mongoServer: MongoMemoryServer;
@@ -111,5 +111,47 @@ describe('getAllTasksFromDatabase', () => {
             const foundTask = tasks.find(task => task.title === taskData.title && task.description === taskData.description);
             expect(foundTask).toBeTruthy();
         }
+    });
+});
+
+describe('updateTaskInDatabase', () => {
+    let mongoServer: MongoMemoryServer;
+    let mongoClient: MongoClient;
+    let mongoUri: string;
+
+    beforeAll(async () => {
+        mongoServer = await MongoMemoryServer.create();
+        mongoUri = mongoServer.getUri();
+        mongoClient = new MongoClient(mongoUri);
+        await mongoClient.connect();
+    });
+
+    afterAll(async () => {
+        await mongoClient.close();
+        await mongoServer.stop();
+    });
+
+    it('should update task in the database', async () => {
+        // Добавляем задачу в базу данных
+        const taskData = { title: 'Test Task', description: 'This is a test task' };
+        const config = { databaseName: 'test', uri: mongoUri };
+        await insertTaskIntoDatabase(taskData, config);
+
+        // Получаем добавленную задачу
+        const database = mongoClient.db(config.databaseName);
+        const tasksCollection = database.collection('tasks');
+        const insertedTask = await tasksCollection.findOne({ title: 'Test Task' });
+
+        // Обновляем задачу
+        const newData = { title: 'Updated Task', description: 'This is an updated task' };
+        await updateTaskInDatabase(insertedTask._id.toString(), newData, config);
+
+        // Получаем обновленную задачу из базы данных
+        const updatedTask = await tasksCollection.findOne({ _id: new ObjectId(insertedTask._id) });
+
+        // Проверяем, что задача обновлена
+        expect(updatedTask).toBeTruthy();
+        expect(updatedTask.title).toEqual(newData.title);
+        expect(updatedTask.description).toEqual(newData.description);
     });
 });
