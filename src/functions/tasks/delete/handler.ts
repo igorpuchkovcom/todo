@@ -1,38 +1,34 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { formatJSONResponse } from '../../../libs/api-gateway';
-import { deleteTaskFromDatabase } from '../../../database';
+import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
+import {formatJSONResponse} from '../../../libs/api-gateway';
+import {deleteTaskFromDatabase} from '../../../database';
+import {DatabaseConfig} from '../../../types/database';
 
-// Обработчик для API endpoint
+// Конфигурация базы данных
+const config: DatabaseConfig = {
+    databaseName: process.env.DOCUMENTDB_DATABASE,
+    uri: process.env.DOCUMENTDB_URI
+};
+
+// Обработчик для удаления задачи
 const deleteTaskHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // Проверяем наличие идентификатора задачи
+    // Проверка наличия идентификатора задачи в параметрах пути
     if (!event.pathParameters || !event.pathParameters.id) {
-        return formatJSONResponse({
-            error: 'Task ID is required'
-        }, 400);
+        // Возвращаем ошибку, если идентификатор задачи отсутствует
+        return formatJSONResponse({error: 'Task ID is required'}, 400);
     }
 
-    // Получаем идентификатор задачи из параметров пути
+    // Получение идентификатора задачи из параметров пути
     const taskId = event.pathParameters.id;
 
     try {
-        // Параметры подключения к базе данных
-        const config = {
-            databaseName: process.env.DOCUMENTDB_DATABASE,
-            uri: process.env.DOCUMENTDB_URI
-        };
-
-        // Удаляем задачу из базы данных
+        // Удаление задачи из базы данных
         await deleteTaskFromDatabase(taskId, config);
 
         // Возвращаем успешный ответ
-        return formatJSONResponse({
-            message: 'Task deleted successfully'
-        }, 200);
+        return formatJSONResponse({message: 'Task deleted successfully'}, 200);
     } catch (error) {
         // Возвращаем ошибку сервера
-        return formatJSONResponse({
-            error: 'Internal server error'
-        }, 500);
+        return formatJSONResponse({error: 'Internal server error'}, 500);
     }
 };
 

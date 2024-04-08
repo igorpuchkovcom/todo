@@ -1,6 +1,9 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { formatJSONResponse } from '../../../libs/api-gateway';
-import { getAllTasksFromDatabase } from '../../../database';
+// src/functions/tasks/get/handler.ts
+
+import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
+import {formatJSONResponse} from '../../../libs/api-gateway';
+import {getAllTasksFromDatabase} from '../../../database';
+import {DatabaseConfig} from '../../../types/database';
 
 interface Task {
     id: string;
@@ -8,19 +11,19 @@ interface Task {
     description: string;
 }
 
-// Обработчик для API endpoint
+// Конфигурация базы данных
+const config: DatabaseConfig = {
+    databaseName: process.env.DOCUMENTDB_DATABASE,
+    uri: process.env.DOCUMENTDB_URI
+};
+
+// Обработчик для получения всех задач
 const getTasksHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
-        // Параметры подключения к базе данных
-        const config = {
-            databaseName: process.env.DOCUMENTDB_DATABASE,
-            uri: process.env.DOCUMENTDB_URI
-        };
-
-        // Получаем все задачи из базы данных
+        // Получение всех задач из базы данных
         const tasks: Task[] = await getAllTasksFromDatabase(config);
 
-        // Преобразуем массив задач в объект, где ключами будут идентификаторы задач
+        // Преобразование массива задач в объект, где ключами будут идентификаторы задач
         const tasksObject = tasks.reduce((acc, task) => {
             acc[task.id] = task;
             return acc;
@@ -30,9 +33,7 @@ const getTasksHandler = async (_event: APIGatewayProxyEvent): Promise<APIGateway
         return formatJSONResponse(tasksObject, 200);
     } catch (error) {
         // Возвращаем ошибку сервера
-        return formatJSONResponse({
-            error: 'Internal server error'
-        }, 500);
+        return formatJSONResponse({error: 'Internal server error'}, 500);
     }
 };
 
