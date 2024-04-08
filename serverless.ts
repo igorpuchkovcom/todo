@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
-import functions from './serverless.functions';
-import resources from './serverless.resources';
+import functions from './src/functions/functions';
+import resources from './resources/resources';
 
 const serverlessConfiguration: AWS = {
     service: 'todo',
