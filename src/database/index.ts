@@ -64,3 +64,25 @@ export async function getAllTasksFromDatabase(config: DatabaseConfig): Promise<a
         await client.close();
     }
 }
+
+// Функция для обновления задачи в базе данных
+export async function updateTaskInDatabase(taskId: string, newData: { title: string, description: string }, config: DatabaseConfig): Promise<void> {
+    const { databaseName, uri } = config;
+    const client = new MongoClient(uri);
+
+    try {
+        await client.connect();
+
+        const database = client.db(databaseName);
+        const tasksCollection = database.collection('tasks');
+
+        // Создаем объект ObjectId из строки taskId
+        const objectId = new ObjectId(taskId);
+
+        // Обновляем задачу в коллекции по её идентификатору
+        await tasksCollection.updateOne({ _id: objectId }, { $set: newData });
+    } finally {
+        // Всегда закрываем соединение с базой данных после завершения операции
+        await client.close();
+    }
+}
