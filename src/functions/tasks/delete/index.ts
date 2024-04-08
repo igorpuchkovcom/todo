@@ -7,6 +7,10 @@ export default {
             http: {
                 method: 'delete',
                 path: 'tasks/delete',
+                authorizer: {
+                    type: 'COGNITO_USER_POOLS',
+                    authorizerId: { Ref: 'ApiGatewayAuthorizer' },
+                },
             },
         },
     ],

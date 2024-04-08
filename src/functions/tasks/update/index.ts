@@ -7,6 +7,10 @@ export default {
             http: {
                 method: 'put',
                 path: 'tasks/update',
+                authorizer: {
+                    type: 'COGNITO_USER_POOLS',
+                    authorizerId: { Ref: 'ApiGatewayAuthorizer' },
+                },
             },
         },
     ],

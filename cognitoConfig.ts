@@ -4,16 +4,7 @@ export default {
         Properties: {
             UserPoolName: 'TodoUserPool',
             UsernameAttributes: ['email'],
-            AutoVerifiedAttributes: ['email'],
-            Policies: {
-                PasswordPolicy: {
-                    MinimumLength: 8,
-                    RequireLowercase: true,
-                    RequireNumbers: true,
-                    RequireSymbols: true,
-                    RequireUppercase: true,
-                },
-            },
+            AutoVerifiedAttributes: ['email']
         },
     },
     UserPoolClient: {
@@ -21,6 +12,18 @@ export default {
         Properties: {
             ClientName: 'TodoUserPoolClient',
             UserPoolId: { Ref: 'UserPool' },
+        },
+    },
+    ApiGatewayAuthorizer: {
+        Type: 'AWS::ApiGateway::Authorizer',
+        Properties: {
+            Name: 'my-authorizer',
+            RestApiId: { Ref: 'ApiGatewayRestApi' },
+            Type: 'COGNITO_USER_POOLS',
+            IdentitySource: 'method.request.header.Authorization',
+            ProviderARNs: [
+                { 'Fn::GetAtt': ['UserPool', 'Arn'] },
+            ],
         },
     },
 };

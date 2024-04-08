@@ -7,6 +7,10 @@ export default {
             http: {
                 method: 'get',
                 path: 'tasks/get',
+                authorizer: {
+                    type: 'COGNITO_USER_POOLS',
+                    authorizerId: { Ref: 'ApiGatewayAuthorizer' },
+                },
             },
         },
     ],
