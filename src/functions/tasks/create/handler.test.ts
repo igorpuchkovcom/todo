@@ -24,8 +24,8 @@ describe('main', () => {
         expect(insertTaskIntoDatabase).toHaveBeenCalledWith(
             { title: 'Test Task', description: 'Test Description' },
             {
-                databaseName: process.env.DOCUMENTDB_DATABASE,
-                uri: process.env.DOCUMENTDB_URI
+                databaseName: 'todo',
+                uri: 'mongodb://' + process.env.DocumentDBHost
             }
         );
 

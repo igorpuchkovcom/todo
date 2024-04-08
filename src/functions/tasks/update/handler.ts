@@ -13,8 +13,8 @@ interface Task {
 
 // Конфигурация базы данных
 const config: DatabaseConfig = {
-    databaseName: process.env.DOCUMENTDB_DATABASE,
-    uri: process.env.DOCUMENTDB_URI
+    databaseName: 'todo',
+    uri: 'mongodb://' + process.env.DocumentDBHost
 };
 
 // Функция для обновления задачи

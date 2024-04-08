@@ -1,9 +1,5 @@
 import {MongoClient, ObjectId} from 'mongodb';
-
-interface DatabaseConfig {
-    databaseName: string;
-    uri: string;
-}
+import {DatabaseConfig} from "../types/database";
 
 // Функция для вставки задачи в базу данных
 export async function insertTaskIntoDatabase(taskData: { title: string, description: string }, config: DatabaseConfig): Promise<void> {

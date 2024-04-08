@@ -34,8 +34,8 @@ describe('Update Task API Endpoint', () => {
             'taskId123',
             { title: 'Updated Task', description: 'This is an updated task' },
             {
-                databaseName: process.env.DOCUMENTDB_DATABASE,
-                uri: process.env.DOCUMENTDB_URI
+                databaseName: 'todo',
+                uri: 'mongodb://' + process.env.DocumentDBHost
             }
         );
 
