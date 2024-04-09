@@ -1,8 +1,8 @@
 import { main } from './handler';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { loginUser } from "../../../infrastructure/cognito";
+import { loginUser } from '../../../infrastructure/cognito';
 
-jest.mock("../../../infrastructure/cognito");
+jest.mock('../../../infrastructure/cognito');
 
 describe('Login API Endpoint', () => {
     it('should return success response on valid credentials', async () => {

@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { registerUser } from '../../../infrastructure/cognito';
 import { formatJSONResponse } from '../../../libs/api-gateway';
-import {handleError} from "../../../helpers";
+import {handleError} from '../../../helpers';
 
 export const registerHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {

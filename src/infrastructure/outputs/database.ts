@@ -1,7 +1,7 @@
 export default {
     DocumentDBURI: {
         Value: {
-            "Fn::GetAtt" : [ 'DocumentDBCluster', 'Endpoint' ]
+            'Fn::GetAtt' : [ 'DocumentDBCluster', 'Endpoint' ]
         },
         Export: {
             Name: 'DocumentDBHost'

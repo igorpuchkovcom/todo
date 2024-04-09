@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { confirmUser } from '../../../infrastructure/cognito';
-import {handleError} from "../../../helpers";
+import {handleError} from '../../../helpers';
 
 // Обработчик для подтверждения пользователя
 export const confirmUserHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
