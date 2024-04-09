@@ -1,35 +1,16 @@
-import { main } from './handler';
-import { APIGatewayProxyEvent } from 'aws-lambda';
+jest.mock('../../../infrastructure/cognito', () => ({
+    confirmUser: jest.fn() // создание мок-функции
+}));
 
-jest.mock('aws-sdk', () => {
-    const successfulConfirmMock = {
-        promise: jest.fn().mockResolvedValue({}),
-    };
+import {APIGatewayProxyEvent} from 'aws-lambda';
+import {confirmUserHandler} from './handler';
+import {confirmUser} from '../../../infrastructure/cognito';
 
-    const failedConfirmMock = {
-        promise: jest.fn().mockImplementation(() => {
-            throw { code: 'CodeMismatchException' };
-        }),
-    };
+// Преобразуем тип confirmUser в jest.Mock, чтобы использовать методы mockResolvedValueOnce и mockRejectedValueOnce
+const mockConfirmUser = confirmUser as jest.Mock;
 
-    const mCognito = {
-        confirmSignUp: jest.fn().mockImplementation((params: any) => {
-            if (params.ConfirmationCode === '123456' && params.Username === 'testUser') {
-                return successfulConfirmMock;
-            } else {
-                return failedConfirmMock;
-            }
-        }),
-    };
-
-    return {
-        CognitoIdentityServiceProvider: jest.fn(() => mCognito),
-    };
-});
-
-describe('Confirm User API Endpoint', () => {
-    it('should return success response on valid confirmation code', async () => {
-        // Тестовые данные для валидации пользователя
+describe('confirmUserHandler', () => {
+    it('should confirm user successfully', async () => {
         const event: APIGatewayProxyEvent = {
             body: JSON.stringify({
                 code: '123456',
@@ -48,18 +29,17 @@ describe('Confirm User API Endpoint', () => {
             resource: ''
         };
 
-        // Вызываем обработчик и ожидаем успешного ответа
-        const response = await main(event);
+        // Создаем мок-функцию confirmUser, которая возвращает успешный результат
+        mockConfirmUser.mockResolvedValueOnce({success: true});
 
-        // Проверка успешного ответа
-        expect(response.statusCode).toEqual(200);
-        expect(typeof response.body).toEqual('string');
-        const responseBody = JSON.parse(response.body);
-        expect(responseBody).toHaveProperty('message', 'User confirmed successfully');
+        const result = await confirmUserHandler(event);
+
+        expect(result.statusCode).toEqual(200);
+        // Проверяем, что результат содержит ожидаемые данные
+        expect(JSON.parse(result.body)).toEqual({success: true});
     });
 
-    it('should return error response on invalid confirmation code', async () => {
-        // Тестовые данные для невалидного подтверждения пользователя
+    it('should handle errors gracefully', async () => {
         const event: APIGatewayProxyEvent = {
             body: JSON.stringify({
                 code: 'invalidCode',
@@ -78,14 +58,13 @@ describe('Confirm User API Endpoint', () => {
             resource: ''
         };
 
-        // Вызываем обработчик и ожидаем ошибочного ответа
-        const response = await main(event);
+        // Создаем мок-функцию confirmUser, которая выбрасывает ошибку
+        mockConfirmUser.mockRejectedValueOnce(new Error('Confirmation error'));
 
-        // Проверка ошибочного ответа
-        expect(response.statusCode).toEqual(500); // Assuming you handle CodeMismatchException as a 400 Bad Request
-        expect(typeof response.body).toEqual('string');
-        const responseBody = JSON.parse(response.body);
-        expect(responseBody).toHaveProperty('error');
-        expect(responseBody.error).toEqual('Internal server error');
+        const result = await confirmUserHandler(event);
+
+        expect(result.statusCode).toEqual(500);
+        // Проверяем, что результат содержит ожидаемые данные
+        expect(JSON.parse(result.body)).toEqual({error: 'Confirmation error'});
     });
 });
