@@ -10,12 +10,12 @@ const cognito = new CognitoIdentityServiceProvider();
 export const confirmUserHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
         // Получаем параметры из запроса
-        const requestBody = JSON.parse(event.body || '{}');
+        const requestBody = JSON.parse(event.body);
         const { code, username } = requestBody;
 
         // Подтверждаем пользователя в Cognito
         await cognito.confirmSignUp({
-            ClientId: process.env.UserPoolClientId || '',
+            ClientId: process.env.UserPoolClientId,
             ConfirmationCode: code,
             Username: username
         }).promise();

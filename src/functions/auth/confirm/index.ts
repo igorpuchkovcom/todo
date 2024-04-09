@@ -6,11 +6,7 @@ export default {
         {
             http: {
                 method: 'post',
-                path: 'confirm',
-                authorizer: {
-                    type: 'COGNITO_USER_POOLS',
-                    authorizerId: { Ref: 'ApiGatewayAuthorizer' },
-                },
+                path: 'auth/confirm'
             },
         },
     ],

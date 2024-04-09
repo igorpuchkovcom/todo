@@ -20,7 +20,7 @@ const updateTaskHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewa
     }
 
     // Парсинг тела запроса для получения новых данных задачи
-    const requestBody = JSON.parse(event.body || '');
+    const requestBody = JSON.parse(event.body);
     const {title, description} = requestBody;
 
     // Проверка наличия новых данных для задачи
