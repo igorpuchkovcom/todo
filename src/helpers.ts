@@ -1,5 +1,5 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
-import {formatJSONResponse} from '../../libs/api-gateway';
+import {formatJSONResponse} from './libs/api-gateway';
 
 // Функция для проверки наличия обязательных полей в запросе
 export const checkRequiredFields = (requestBody: any, requiredFields: string[]): boolean => {

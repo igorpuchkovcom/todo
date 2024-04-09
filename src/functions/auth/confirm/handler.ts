@@ -1,10 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { formatJSONResponse } from '../../../libs/api-gateway';
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
-import { handleError } from '../helpers';
-
-// Создаем экземпляр AWS SDK для работы с Cognito
-const cognito = new CognitoIdentityServiceProvider();
+import { confirmUser } from '../../../infrastructure/cognito';
+import {handleError} from "../../../helpers";
 
 // Обработчик для подтверждения пользователя
 export const confirmUserHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -14,14 +10,10 @@ export const confirmUserHandler = async (event: APIGatewayProxyEvent): Promise<A
         const { code, username } = requestBody;
 
         // Подтверждаем пользователя в Cognito
-        await cognito.confirmSignUp({
-            ClientId: process.env.UserPoolClientId,
-            ConfirmationCode: code,
-            Username: username
-        }).promise();
+        const result = await confirmUser(code, username);
 
         // Возвращаем успешный ответ
-        return formatJSONResponse({ message: 'User confirmed successfully' }, 200);
+        return { statusCode: 200, body: JSON.stringify(result) };
     } catch (error) {
         // Обрабатываем ошибку подтверждения
         return handleError(error);

@@ -6,7 +6,7 @@ jest.mock('../../../infrastructure/database', () => ({
     insertTaskIntoDatabase: jest.fn(), // Создаем мок функции вставки задачи в базу данных
 }));
 
-describe('main', () => {
+describe('Create Task API Endpoint', () => {
     // Тестирование успешного создания задачи
     it('should create a new task successfully', async () => {
         // Создаем mock объект события APIGatewayProxyEvent
