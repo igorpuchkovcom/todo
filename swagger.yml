@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: ToDo API
+  description: RESTful API for managing ToDo tasks
+  version: 1.0.0
+servers:
+  - url: "{{base_url}}"
+paths:
+  /auth/register:
+    post:
+      summary: Register User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User successfully registered
+  /auth/login:
+    post:
+      summary: Login User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User successfully logged in
+  /auth/confirm:
+    post:
+      summary: Confirm User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                username:
+                  type: string
+      responses:
+        '200':
+          description: User successfully confirmed
+  /tasks/create:
+    post:
+      summary: Create Task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Task created successfully
+  /tasks/delete:
+    delete:
+      summary: Delete Task
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task deleted successfully
+  /tasks/get:
+    get:
+      summary: Get Tasks
+      responses:
+        '200':
+          description: List of tasks retrieved successfully
+  /tasks/update:
+    put:
+      summary: Update Task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskId:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Task updated successfully
