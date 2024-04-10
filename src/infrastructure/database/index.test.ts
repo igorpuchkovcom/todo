@@ -1,6 +1,6 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { MongoClient, ObjectId } from 'mongodb';
-import { insertTaskIntoDatabase, deleteTaskFromDatabase, getAllTasksFromDatabase, updateTaskInDatabase } from './index';
+import {MongoMemoryServer} from 'mongodb-memory-server';
+import {MongoClient, ObjectId} from 'mongodb';
+import {deleteTaskFromDatabase, getAllTasksFromDatabase, insertTaskIntoDatabase, updateTaskInDatabase} from './index';
 
 const title = 'Test Task';
 const description = 'This is a test task';
@@ -25,14 +25,14 @@ describe('insertTaskIntoDatabase', () => {
     });
 
     it('should insert task into the database', async () => {
-        const taskData = { title: title, description: description };
-        const config = { databaseName: databaseName, uri: mongoUri };
+        const taskData = {title: title, description: description};
+        const config = {databaseName: databaseName, uri: mongoUri};
 
         await insertTaskIntoDatabase(taskData, config);
 
         const database = mongoClient.db(config.databaseName);
         const tasksCollection = database.collection(name);
-        const insertedTask = await tasksCollection.findOne({ title: title });
+        const insertedTask = await tasksCollection.findOne({title: title});
 
         expect(insertedTask).toBeTruthy();
         expect(insertedTask.title).toEqual(taskData.title);
@@ -59,20 +59,20 @@ describe('deleteTaskFromDatabase', () => {
 
     it('should delete task from the database', async () => {
         // Добавляем задачу в базу данных
-        const taskData = { title: title, description: description };
-        const config = { databaseName: databaseName, uri: mongoUri };
+        const taskData = {title: title, description: description};
+        const config = {databaseName: databaseName, uri: mongoUri};
         await insertTaskIntoDatabase(taskData, config);
 
         // Получаем добавленную задачу
         const database = mongoClient.db(config.databaseName);
         const tasksCollection = database.collection(name);
-        const insertedTask = await tasksCollection.findOne({ title: title });
+        const insertedTask = await tasksCollection.findOne({title: title});
 
         // Удаляем задачу по её идентификатору
         await deleteTaskFromDatabase(insertedTask._id.toString(), config);
 
         // Проверяем, что задача удалена из базы данных
-        const deletedTask = await tasksCollection.findOne({ _id: new ObjectId(insertedTask._id) });
+        const deletedTask = await tasksCollection.findOne({_id: new ObjectId(insertedTask._id)});
         expect(deletedTask).toBeNull();
     });
 });
@@ -97,10 +97,10 @@ describe('getAllTasksFromDatabase', () => {
     it('should return all tasks from the database', async () => {
         // Добавляем несколько задач в базу данных для тестирования
         const tasksData = [
-            { title: 'Test Task 1', description: 'Description for Test Task 1' },
-            { title: 'Test Task 2', description: 'Description for Test Task 2' },
+            {title: 'Test Task 1', description: 'Description for Test Task 1'},
+            {title: 'Test Task 2', description: 'Description for Test Task 2'},
         ];
-        const config = { databaseName: databaseName, uri: mongoUri };
+        const config = {databaseName: databaseName, uri: mongoUri};
         for (const taskData of tasksData) {
             await insertTaskIntoDatabase(taskData, config);
         }
@@ -138,21 +138,21 @@ describe('updateTaskInDatabase', () => {
 
     it('should update task in the database', async () => {
         // Добавляем задачу в базу данных
-        const taskData = { title: title, description: description };
-        const config = { databaseName: databaseName, uri: mongoUri };
+        const taskData = {title: title, description: description};
+        const config = {databaseName: databaseName, uri: mongoUri};
         await insertTaskIntoDatabase(taskData, config);
 
         // Получаем добавленную задачу
         const database = mongoClient.db(config.databaseName);
         const tasksCollection = database.collection(name);
-        const insertedTask = await tasksCollection.findOne({ title: title });
+        const insertedTask = await tasksCollection.findOne({title: title});
 
         // Обновляем задачу
-        const newData = { title: 'Updated Task', description: 'This is an updated task' };
+        const newData = {title: 'Updated Task', description: 'This is an updated task'};
         await updateTaskInDatabase(insertedTask._id.toString(), newData, config);
 
         // Получаем обновленную задачу из базы данных
-        const updatedTask = await tasksCollection.findOne({ _id: new ObjectId(insertedTask._id) });
+        const updatedTask = await tasksCollection.findOne({_id: new ObjectId(insertedTask._id)});
 
         // Проверяем, что задача обновлена
         expect(updatedTask).toBeTruthy();

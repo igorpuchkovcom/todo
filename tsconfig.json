@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.paths.json",
   "compilerOptions": {
+    "types": ["jest", "node"],
     "lib": ["ESNext"],
     "moduleResolution": "node",
     "noUnusedLocals": true,
@@ -9,17 +10,19 @@
     "sourceMap": true,
     "target": "ES2020",
     "outDir": "lib",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@functions/*": ["src/functions/*"],
+      "@interfaces/*": ["src/interfaces/*"]
+    }
   },
-  "include": ["src/**/*.ts", "serverless.ts"],
+  "include": ["src/**/*.ts", "config/*.ts", "serverless.ts"],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",
     ".webpack/**/*",
     "_warmup/**/*",
     ".vscode/**/*"
-  ],
-  "ts-node": {
-    "require": ["tsconfig-paths/register"]
-  }
+  ]
 }

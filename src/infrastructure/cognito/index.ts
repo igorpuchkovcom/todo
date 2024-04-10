@@ -1,7 +1,13 @@
-import { CognitoIdentityProviderClient, SignUpCommand, ConfirmSignUpCommand, InitiateAuthCommand, AuthFlowType } from "@aws-sdk/client-cognito-identity-provider";
+import {
+    AuthFlowType,
+    CognitoIdentityProviderClient,
+    ConfirmSignUpCommand,
+    InitiateAuthCommand,
+    SignUpCommand
+} from "@aws-sdk/client-cognito-identity-provider";
 
 const region = process.env.AWS_REGION || "us-east-1";
-const cognitoClient = new CognitoIdentityProviderClient({ region: region });
+const cognitoClient = new CognitoIdentityProviderClient({region: region});
 
 export const registerUser = async (username: string, email: string, password: string) => {
     try {
@@ -10,12 +16,12 @@ export const registerUser = async (username: string, email: string, password: st
             Username: username,
             Password: password,
             UserAttributes: [
-                { Name: "email", Value: email }
+                {Name: "email", Value: email}
             ]
         };
 
         await cognitoClient.send(new SignUpCommand(params));
-        return { message: "User successfully registered" };
+        return {message: "User successfully registered"};
     } catch (error) {
         throw new Error(error);
     }
@@ -30,7 +36,7 @@ export const confirmUser = async (code: string, username: string) => {
         };
 
         await cognitoClient.send(new ConfirmSignUpCommand(params));
-        return { message: "User successfully confirmed" };
+        return {message: "User successfully confirmed"};
     } catch (error) {
         throw new Error(error);
     }
@@ -49,7 +55,7 @@ export const loginUser = async (email: string, password: string) => {
 
         const response = await cognitoClient.send(new InitiateAuthCommand(params));
         // Обработка ответа и возврат необходимых данных о пользователе
-        return { message: "User successfully logged in", data: response };
+        return {message: "User successfully logged in", data: response};
     } catch (error) {
         throw new Error(error);
     }

@@ -1,34 +1,26 @@
-import { main } from './handler';
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import { registerUser } from '../../../infrastructure/cognito';
+import {main} from './handler';
+import {APIGatewayProxyEvent} from 'aws-lambda';
+import {registerUser} from '../../../infrastructure/cognito';
 
 jest.mock('../../../infrastructure/cognito', () => ({
     registerUser: jest.fn(),
 }));
 
+const event: APIGatewayProxyEvent = {
+    path: '/auth/register',
+    httpMethod: 'POST',
+} as unknown as APIGatewayProxyEvent;
+
 describe('Register API Endpoint', () => {
     it('should return success response on valid input', async () => {
         // Устанавливаем поведение мок-функции registerUser для успешной регистрации
-        (registerUser as jest.Mock).mockResolvedValueOnce({ UserSub: '123456789' });
+        (registerUser as jest.Mock).mockResolvedValueOnce({UserSub: '123456789'});
 
-        const event: APIGatewayProxyEvent = {
-            body: JSON.stringify({
-                username: 'testUser',
-                email: 'test@example.com',
-                password: 'testPassword'
-            }),
-            path: '/auth/register',
-            httpMethod: 'POST',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: null,
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
+        event.body = JSON.stringify({
+            username: 'testUser',
+            email: 'test@example.com',
+            password: 'testPassword'
+        });
 
         const response = await main(event);
 
@@ -43,23 +35,10 @@ describe('Register API Endpoint', () => {
         // Устанавливаем поведение мок-функции registerUser для невалидной регистрации
         (registerUser as jest.Mock).mockRejectedValueOnce(new Error('Missing required fields'));
 
-        const event: APIGatewayProxyEvent = {
-            body: JSON.stringify({
-                username: 'testUser',
-                email: 'test@example.com'
-            }),
-            path: '/auth/register',
-            httpMethod: 'POST',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: null,
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
+        event.body = JSON.stringify({
+            username: 'testUser',
+            email: 'test@example.com',
+        });
 
         const response = await main(event);
 

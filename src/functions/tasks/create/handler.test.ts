@@ -1,6 +1,6 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import { main } from './handler'; // Импортируем обработчик, который мы хотим протестировать
-import { insertTaskIntoDatabase } from '../../../infrastructure/database'; // Импортируем функцию вставки задачи в базу данных
+import {APIGatewayProxyEvent} from 'aws-lambda';
+import {main} from './handler'; // Импортируем обработчик, который мы хотим протестировать
+import {insertTaskIntoDatabase} from '../../../infrastructure/database'; // Импортируем функцию вставки задачи в базу данных
 
 jest.mock('../../../infrastructure/database', () => ({
     insertTaskIntoDatabase: jest.fn(), // Создаем мок функции вставки задачи в базу данных
@@ -22,7 +22,7 @@ describe('Create Task API Endpoint', () => {
 
         // Проверяем, что функция вставки задачи в базу данных была вызвана с правильными аргументами
         expect(insertTaskIntoDatabase).toHaveBeenCalledWith(
-            { title: 'Test Task', description: 'Test Description' },
+            {title: 'Test Task', description: 'Test Description'},
             {
                 databaseName: 'todo',
                 uri: 'mongodb://' + process.env.DocumentDBHost
@@ -32,7 +32,7 @@ describe('Create Task API Endpoint', () => {
         // Проверяем, что обработчик возвращает ожидаемый успешный ответ
         expect(response).toEqual({
             statusCode: 200,
-            body: JSON.stringify({ message: 'New task created successfully' }),
+            body: JSON.stringify({message: 'New task created successfully'}),
         });
     });
 
@@ -49,7 +49,7 @@ describe('Create Task API Endpoint', () => {
         // Проверяем, что обработчик возвращает ожидаемую ошибку о недостающих полях
         expect(response).toEqual({
             statusCode: 400,
-            body: JSON.stringify({ error: 'Missing required fields' }),
+            body: JSON.stringify({error: 'Missing required fields'}),
         });
     });
 
@@ -64,7 +64,7 @@ describe('Create Task API Endpoint', () => {
         // Проверяем, что обработчик возвращает ожидаемую ошибку сервера
         expect(response).toEqual({
             statusCode: 500,
-            body: JSON.stringify({ error: 'Database insertion failed' }),
+            body: JSON.stringify({error: 'Database insertion failed'}),
         });
     });
 });

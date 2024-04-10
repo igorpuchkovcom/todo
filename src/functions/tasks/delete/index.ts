@@ -1,4 +1,4 @@
-import { handlerPath } from '../../../libs/handler-resolver';
+import {handlerPath} from '../../../libs/handler-resolver';
 
 export default {
     handler: `${handlerPath(__dirname)}/handler.main`,
@@ -9,7 +9,7 @@ export default {
                 path: 'tasks/delete',
                 authorizer: {
                     type: 'COGNITO_USER_POOLS',
-                    authorizerId: { Ref: 'ApiGatewayAuthorizer' },
+                    authorizerId: {Ref: 'ApiGatewayAuthorizer'},
                 },
             },
         },

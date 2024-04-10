@@ -4,7 +4,7 @@ export default {
         Properties: {
             DBSubnetGroupName: 'PrivateDbSubnet',
             DBSubnetGroupDescription: 'PrivateDbSubnet',
-            SubnetIds: [{ Ref: 'Subnet1' }, { Ref: 'Subnet2' }],
+            SubnetIds: [{Ref: 'Subnet1'}, {Ref: 'Subnet2'}],
         },
     },
     DatabaseVpcSecurityGroup: {
@@ -18,7 +18,7 @@ export default {
                 FromPort: '27017',
                 ToPort: '27017',
             },
-            VpcId: { Ref: 'VPC' },
+            VpcId: {Ref: 'VPC'},
         },
     },
 };

@@ -1,9 +1,12 @@
 import {MongoClient, ObjectId} from 'mongodb';
-import {DatabaseConfig} from '../../types/database';
+import {DatabaseConfig} from '@interfaces/database';
 
 // Функция для вставки задачи в базу данных
-export async function insertTaskIntoDatabase(taskData: { title: string, description: string }, config: DatabaseConfig): Promise<void> {
-    const { databaseName, uri } = config;
+export async function insertTaskIntoDatabase(taskData: {
+    title: string,
+    description: string
+}, config: DatabaseConfig): Promise<void> {
+    const {databaseName, uri} = config;
     const client = new MongoClient(uri);
 
     try {
@@ -22,7 +25,7 @@ export async function insertTaskIntoDatabase(taskData: { title: string, descript
 
 // Функция для удаления задачи из базы данных
 export async function deleteTaskFromDatabase(taskId: string, config: DatabaseConfig): Promise<void> {
-    const { databaseName, uri } = config;
+    const {databaseName, uri} = config;
     const client = new MongoClient(uri);
 
     try {
@@ -35,7 +38,7 @@ export async function deleteTaskFromDatabase(taskId: string, config: DatabaseCon
         const objectId = new ObjectId(taskId);
 
         // Удаляем задачу из коллекции по её идентификатору
-        await tasksCollection.deleteOne({ _id: objectId });
+        await tasksCollection.deleteOne({_id: objectId});
     } finally {
         // Всегда закрываем соединение с базой данных после завершения операции
         await client.close();
@@ -44,7 +47,7 @@ export async function deleteTaskFromDatabase(taskId: string, config: DatabaseCon
 
 // Функция для получения всех задач из базы данных
 export async function getAllTasksFromDatabase(config: DatabaseConfig): Promise<any[]> {
-    const { databaseName, uri } = config;
+    const {databaseName, uri} = config;
     const client = new MongoClient(uri);
 
     try {
@@ -62,8 +65,11 @@ export async function getAllTasksFromDatabase(config: DatabaseConfig): Promise<a
 }
 
 // Функция для обновления задачи в базе данных
-export async function updateTaskInDatabase(taskId: string, newData: { title: string, description: string }, config: DatabaseConfig): Promise<void> {
-    const { databaseName, uri } = config;
+export async function updateTaskInDatabase(taskId: string, newData: {
+    title: string,
+    description: string
+}, config: DatabaseConfig): Promise<void> {
+    const {databaseName, uri} = config;
     const client = new MongoClient(uri);
 
     try {
@@ -76,7 +82,7 @@ export async function updateTaskInDatabase(taskId: string, newData: { title: str
         const objectId = new ObjectId(taskId);
 
         // Обновляем задачу в коллекции по её идентификатору
-        await tasksCollection.updateOne({ _id: objectId }, { $set: newData });
+        await tasksCollection.updateOne({_id: objectId}, {$set: newData});
     } finally {
         // Всегда закрываем соединение с базой данных после завершения операции
         await client.close();

@@ -25,11 +25,11 @@ export default {
         Type: 'AWS::ApiGateway::Authorizer',
         Properties: {
             Name: 'my-authorizer',
-            RestApiId: { Ref: 'ApiGatewayRestApi' },
+            RestApiId: {Ref: 'ApiGatewayRestApi'},
             Type: 'COGNITO_USER_POOLS',
             IdentitySource: 'method.request.header.Authorization',
             ProviderARNs: [
-                { 'Fn::GetAtt': ['UserPool', 'Arn'] },
+                {'Fn::GetAtt': ['UserPool', 'Arn']},
             ],
         },
     },

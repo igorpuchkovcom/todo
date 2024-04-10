@@ -1,6 +1,6 @@
-import { main } from './handler';
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import { updateTaskInDatabase } from '../../../infrastructure/database';
+import {main} from './handler';
+import {APIGatewayProxyEvent} from 'aws-lambda';
+import {updateTaskInDatabase} from '../../../infrastructure/database';
 
 jest.mock('../../../infrastructure/database', () => ({
     updateTaskInDatabase: jest.fn(), // Создаем мок функции обновления задачи в базе данных
@@ -17,13 +17,13 @@ const event: APIGatewayProxyEvent = {
 
 describe('Update Task API Endpoint', () => {
     it('should update an existing task', async () => {
-        event.pathParameters = { id: 'taskId123' };
+        event.pathParameters = {id: 'taskId123'};
         const response = await main(event);
 
         // Проверяем, что функция обновления задачи в базе данных была вызвана с правильными аргументами
         expect(updateTaskInDatabase).toHaveBeenCalledWith(
             'taskId123',
-            { title: 'Updated Task', description: 'This is an updated task' },
+            {title: 'Updated Task', description: 'This is an updated task'},
             {
                 databaseName: 'todo',
                 uri: 'mongodb://' + process.env.DocumentDBHost

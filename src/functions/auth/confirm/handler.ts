@@ -1,5 +1,5 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { confirmUser } from '../../../infrastructure/cognito';
+import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
+import {confirmUser} from '../../../infrastructure/cognito';
 import {handleError} from '../../../helpers';
 import {formatJSONResponse} from "../../../libs/api-gateway";
 
@@ -8,7 +8,7 @@ export const confirmUserHandler = async (event: APIGatewayProxyEvent): Promise<A
     try {
         // Получаем параметры из запроса
         const requestBody = JSON.parse(event.body);
-        const { code, username } = requestBody;
+        const {code, username} = requestBody;
 
         // Подтверждаем пользователя в Cognito
         const result = await confirmUser(code, username);

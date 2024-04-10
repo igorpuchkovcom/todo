@@ -1,4 +1,4 @@
-import { DatabaseConfig } from '../src/types/database';
+import { DatabaseConfig } from '../src/interfaces/database';
 
 const config: DatabaseConfig = {
     databaseName: 'todo',

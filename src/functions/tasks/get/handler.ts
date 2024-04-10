@@ -2,12 +2,7 @@ import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {formatJSONResponse} from '../../../libs/api-gateway';
 import {getAllTasksFromDatabase} from '../../../infrastructure/database';
 import config from '../../../../config/database-config';
-
-interface Task {
-    id: string;
-    title: string;
-    description: string;
-}
+import {Task} from '@interfaces/task';
 
 // Обработчик для получения всех задач
 const getTasksHandler = async (_event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {

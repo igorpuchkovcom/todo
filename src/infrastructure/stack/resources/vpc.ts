@@ -11,7 +11,7 @@ export default {
         Properties: {
             AvailabilityZone: 'us-east-1a',
             CidrBlock: '10.0.64.0/18',
-            VpcId: { Ref: 'VPC' },
+            VpcId: {Ref: 'VPC'},
         },
     },
     Subnet2: {
@@ -19,7 +19,7 @@ export default {
         Properties: {
             AvailabilityZone: 'us-east-1b',
             CidrBlock: '10.0.128.0/18',
-            VpcId: { Ref: 'VPC' },
+            VpcId: {Ref: 'VPC'},
         },
     },
 };

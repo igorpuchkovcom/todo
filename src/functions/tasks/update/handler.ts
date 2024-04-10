@@ -2,12 +2,7 @@ import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {formatJSONResponse} from '../../../libs/api-gateway';
 import {updateTaskInDatabase} from '../../../infrastructure/database';
 import config from '../../../../config/database-config';
-
-interface Task {
-    id: string;
-    title: string;
-    description: string;
-}
+import {Task} from '@interfaces/task';
 
 // Функция для обновления задачи
 const updateTaskHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {

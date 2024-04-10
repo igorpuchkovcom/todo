@@ -1,32 +1,24 @@
-import { main } from './handler';
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import { loginUser } from '../../../infrastructure/cognito';
+import {main} from './handler';
+import {APIGatewayProxyEvent} from 'aws-lambda';
+import {loginUser} from '../../../infrastructure/cognito';
 
 jest.mock('../../../infrastructure/cognito');
+
+const event: APIGatewayProxyEvent = {
+    httpMethod: 'POST',
+    path: '/auth/login',
+} as unknown as APIGatewayProxyEvent;
 
 describe('Login API Endpoint', () => {
     it('should return success response on valid credentials', async () => {
         // Устанавливаем поведение мок-функции loginUser для успешного входа
-        (loginUser as jest.Mock).mockResolvedValueOnce({ AccessToken: 'mocked_access_token' });
+        (loginUser as jest.Mock).mockResolvedValueOnce({AccessToken: 'mocked_access_token'});
 
         // Тестовые данные для валидного входа
-        const event: APIGatewayProxyEvent = {
-            body: JSON.stringify({
-                email: 'test@example.com',
-                password: 'testPassword'
-            }),
-            httpMethod: 'POST',
-            path: '/auth/login',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: null,
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
+        event.body = JSON.stringify({
+            email: 'test@example.com',
+            password: 'testPassword'
+        });
 
         // Вызываем обработчик и ожидаем успешного ответа
         const response = await main(event);
@@ -44,23 +36,10 @@ describe('Login API Endpoint', () => {
         (loginUser as jest.Mock).mockRejectedValueOnce(new Error('Invalid credentials') as any); // Явное указание типа
 
         // Тестовые данные для невалидного входа
-        const event: APIGatewayProxyEvent = {
-            body: JSON.stringify({
-                email: 'test@example.com',
-                password: 'wrongPassword'
-            }),
-            path: '/auth/login',
-            httpMethod: 'POST',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: null,
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
+        event.body = JSON.stringify({
+            email: 'test@example.com',
+            password: 'wrongPassword'
+        });
 
         // Вызываем обработчик и ожидаем ошибочного ответа
         const response = await main(event);

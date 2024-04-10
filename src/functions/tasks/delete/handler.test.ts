@@ -1,6 +1,6 @@
-import { main } from './handler';
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import { deleteTaskFromDatabase } from '../../../infrastructure/database';
+import {main} from './handler';
+import {APIGatewayProxyEvent} from 'aws-lambda';
+import {deleteTaskFromDatabase} from '../../../infrastructure/database';
 
 jest.mock('../../../infrastructure/database', () => ({
     deleteTaskFromDatabase: jest.fn(), // Создаем мок функции удаления задачи из базы данных
@@ -15,7 +15,7 @@ const event: APIGatewayProxyEvent = {
 
 describe('Delete Task API Endpoint', () => {
     it('should delete an existing task', async () => {
-        event.pathParameters = { id: 'taskId123' };
+        event.pathParameters = {id: 'taskId123'};
         const response = await main(event);
 
         // Проверяем, что функция удаления задачи из базы данных была вызвана с правильным аргументом

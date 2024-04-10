@@ -1,6 +1,6 @@
-import { main } from './handler';
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import { getAllTasksFromDatabase } from '../../../infrastructure/database';
+import {main} from './handler';
+import {APIGatewayProxyEvent} from 'aws-lambda';
+import {getAllTasksFromDatabase} from '../../../infrastructure/database';
 
 // Mock the database module
 jest.mock('../../../infrastructure/database', () => ({
@@ -11,8 +11,8 @@ describe('Get Tasks API Endpoint', () => {
     it('should return list of tasks', async () => {
         // Mocked tasks data
         const mockedTasks = [
-            { id: '1', title: 'Task 1', description: 'Description for Task 1' },
-            { id: '2', title: 'Task 2', description: 'Description for Task 2' }
+            {id: '1', title: 'Task 1', description: 'Description for Task 1'},
+            {id: '2', title: 'Task 2', description: 'Description for Task 2'}
         ];
 
         // Mock the implementation of getAllTasksFromDatabase
