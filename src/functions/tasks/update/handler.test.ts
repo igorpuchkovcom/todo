@@ -6,27 +6,18 @@ jest.mock('../../../infrastructure/database', () => ({
     updateTaskInDatabase: jest.fn(), // Создаем мок функции обновления задачи в базе данных
 }));
 
+const event: APIGatewayProxyEvent = {
+    body: JSON.stringify({
+        title: 'Updated Task',
+        description: 'This is an updated task'
+    }),
+    httpMethod: 'PUT',
+    path: '/tasks/update'
+} as unknown as APIGatewayProxyEvent;
+
 describe('Update Task API Endpoint', () => {
     it('should update an existing task', async () => {
-        // Тестовые данные для обновления существующей задачи
-        const event: APIGatewayProxyEvent = {
-            body: JSON.stringify({
-                title: 'Updated Task',
-                description: 'This is an updated task'
-            }),
-            path: '/tasks/update',
-            httpMethod: 'PUT',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: { id: 'taskId123' }, // Здесь taskId123 - это идентификатор существующей задачи
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
-
+        event.pathParameters = { id: 'taskId123' };
         const response = await main(event);
 
         // Проверяем, что функция обновления задачи в базе данных была вызвана с правильными аргументами
@@ -45,25 +36,7 @@ describe('Update Task API Endpoint', () => {
     });
 
     it('should return error response when task ID is not provided', async () => {
-        // Тестовые данные для обновления задачи без предоставления идентификатора
-        const event: APIGatewayProxyEvent = {
-            body: JSON.stringify({
-                title: 'Updated Task',
-                description: 'This is an updated task'
-            }),
-            path: '/tasks/update',
-            httpMethod: 'PUT',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: null,
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
-
+        delete event.pathParameters;
         const response = await main(event);
 
         // Проверка ошибочного ответа

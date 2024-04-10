@@ -20,19 +20,9 @@ describe('Get Tasks API Endpoint', () => {
 
         // Тестовые данные для запроса списка задач
         const event: APIGatewayProxyEvent = {
-            body: '',
             httpMethod: 'GET',
             path: '/tasks/get',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: null,
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
+        } as unknown as APIGatewayProxyEvent;
 
         const response = await main(event);
 

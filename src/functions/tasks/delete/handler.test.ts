@@ -6,25 +6,16 @@ jest.mock('../../../infrastructure/database', () => ({
     deleteTaskFromDatabase: jest.fn(), // Создаем мок функции удаления задачи из базы данных
 }));
 
+const event: APIGatewayProxyEvent = {
+    body: '',
+    httpMethod: 'DELETE',
+    path: '/tasks/delete',
+} as unknown as APIGatewayProxyEvent;
+
+
 describe('Delete Task API Endpoint', () => {
     it('should delete an existing task', async () => {
-        // Тестовые данные для удаления существующей задачи
-        const event: APIGatewayProxyEvent = {
-            body: '',
-            httpMethod: 'DELETE',
-            path: '/tasks/delete',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: { id: 'taskId123' }, // Здесь taskId123 - это идентификатор существующей задачи
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
-
-        // Вызываем обработчик события
+        event.pathParameters = { id: 'taskId123' };
         const response = await main(event);
 
         // Проверяем, что функция удаления задачи из базы данных была вызвана с правильным аргументом
@@ -36,23 +27,7 @@ describe('Delete Task API Endpoint', () => {
     });
 
     it('should return error response when task ID is not provided', async () => {
-        // Тестовые данные для удаления задачи без предоставления идентификатора
-        const event: APIGatewayProxyEvent = {
-            body: '',
-            httpMethod: 'DELETE',
-            path: '/tasks/delete',
-            queryStringParameters: null,
-            multiValueQueryStringParameters: null,
-            pathParameters: null,
-            stageVariables: null,
-            headers: {},
-            multiValueHeaders: null,
-            isBase64Encoded: false,
-            requestContext: null,
-            resource: ''
-        };
-
-        // Вызываем обработчик события
+        delete event.pathParameters;
         const response = await main(event);
 
         // Проверяем ошибочный ответ

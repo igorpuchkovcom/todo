@@ -6,17 +6,17 @@ jest.mock('../../../infrastructure/database', () => ({
     insertTaskIntoDatabase: jest.fn(), // Создаем мок функции вставки задачи в базу данных
 }));
 
+// Создаем mock объект события APIGatewayProxyEvent
+const event: APIGatewayProxyEvent = {
+    body: JSON.stringify({
+        title: 'Test Task',
+        description: 'Test Description',
+    }),
+} as unknown as APIGatewayProxyEvent;
+
 describe('Create Task API Endpoint', () => {
     // Тестирование успешного создания задачи
     it('should create a new task successfully', async () => {
-        // Создаем mock объект события APIGatewayProxyEvent
-        const event: APIGatewayProxyEvent = {
-            body: JSON.stringify({
-                title: 'Test Task',
-                description: 'Test Description',
-            }),
-        } as unknown as APIGatewayProxyEvent;
-
         // Вызываем обработчик с событием
         const response = await main(event);
 
@@ -57,14 +57,6 @@ describe('Create Task API Endpoint', () => {
     it('should return an internal server error when database insertion fails', async () => {
         // Устанавливаем мок функцию вставки задачи в базу данных, чтобы выбросить ошибку
         (insertTaskIntoDatabase as jest.Mock).mockRejectedValue(new Error('Database insertion failed'));
-
-        // Создаем mock объект события APIGatewayProxyEvent
-        const event: APIGatewayProxyEvent = {
-            body: JSON.stringify({
-                title: 'Test Task',
-                description: 'Test Description',
-            }),
-        } as unknown as APIGatewayProxyEvent;
 
         // Вызываем обработчик с событием
         const response = await main(event);
