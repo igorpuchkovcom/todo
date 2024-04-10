@@ -11,7 +11,6 @@
     "target": "ES2020",
     "outDir": "lib",
     "esModuleInterop": true,
-    "baseUrl": ".",
     "paths": {
       "@interfaces/*": ["src/interfaces/*"]
     }
@@ -23,5 +22,8 @@
     ".webpack/**/*",
     "_warmup/**/*",
     ".vscode/**/*"
-  ]
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }

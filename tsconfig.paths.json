@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@interfaces/*": ["src/interfaces/*"]
+      "@interfaces/*": ["src/interfaces/*"],
+      "@functions/*": ["src/functions/*"],
+      "@libs/*": ["src/libs/*"]
     }
   }
 }
