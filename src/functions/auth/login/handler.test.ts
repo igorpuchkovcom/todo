@@ -41,7 +41,7 @@ describe('Login API Endpoint', () => {
 
     it('should return error response on invalid credentials', async () => {
         // Устанавливаем поведение мок-функции loginUser для невалидного входа
-        (loginUser as jest.Mock).mockRejectedValueOnce(new Error('Invalid credentials'));
+        (loginUser as jest.Mock).mockRejectedValueOnce(new Error('Invalid credentials') as any); // Явное указание типа
 
         // Тестовые данные для невалидного входа
         const event: APIGatewayProxyEvent = {

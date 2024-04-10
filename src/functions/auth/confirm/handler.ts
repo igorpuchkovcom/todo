@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { confirmUser } from '../../../infrastructure/cognito';
 import {handleError} from '../../../helpers';
+import {formatJSONResponse} from "../../../libs/api-gateway";
 
 // Обработчик для подтверждения пользователя
 export const confirmUserHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -13,7 +14,7 @@ export const confirmUserHandler = async (event: APIGatewayProxyEvent): Promise<A
         const result = await confirmUser(code, username);
 
         // Возвращаем успешный ответ
-        return { statusCode: 200, body: JSON.stringify(result) };
+        return formatJSONResponse(result, 200);
     } catch (error) {
         // Обрабатываем ошибку подтверждения
         return handleError(error);
