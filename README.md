@@ -1,95 +1,89 @@
-# Serverless - AWS Node.js Typescript
+## Project "Task Management"
 
-This project has been generated using the `aws-nodejs-typescript` template from the [Serverless framework](https://www.serverless.com/).
+This project is an API for task management using AWS Lambda serverless functions, as well as DynamoDB and AWS DocumentDB databases. The project is written in TypeScript and utilizes the Serverless Framework for deploying infrastructure on AWS.
 
-For detailed instructions, please refer to the [documentation](https://www.serverless.com/framework/docs/providers/aws/).
+### Technology Stack
 
-## Installation/deployment instructions
+- **Node.js**: JavaScript runtime environment used for writing server-side code.
+- **TypeScript**: Programming language adding static typing to JavaScript.
+- **Serverless Framework**: Framework for developing, deploying, and managing serverless applications on AWS, Azure, Google Cloud, and other platforms.
+- **AWS (Amazon Web Services)**:
+    - **AWS Lambda**: Serverless compute service for running code in response to events.
+    - **AWS API Gateway**: Service for managing, publishing, securing, and monitoring API interfaces.
+    - **AWS DocumentDB**: Fully managed database compatible with MongoDB.
+    - **AWS Cognito**: Identity management service providing authentication, authorization, and user management for web and mobile apps.
 
-Depending on your preferred package manager, follow the instructions below to deploy your project.
+### Deployment
 
-> **Requirements**: NodeJS `lts/iron (v.20.9.0)`. If you're using [nvm](https://github.com/nvm-sh/nvm), run `nvm use` to ensure you're using the same Node version in local and in your lambda's runtime.
+1. Install Node.js and npm.
+2. Install Serverless Framework globally: `npm install -g serverless`.
+3. Install project dependencies: `npm install`.
+4. Set up AWS credentials.
+5. Provide necessary environment variables.
+6. Deploy the project to AWS by running: `sls deploy`.
 
-### Using NPM
+### Project Structure
 
-- Run `npm i` to install the project dependencies
-- Run `npx sls deploy` to deploy this stack to AWS
-
-### Using Yarn
-
-- Run `yarn` to install the project dependencies
-- Run `yarn sls deploy` to deploy this stack to AWS
-
-## Test your service
-
-This template contains a single lambda function triggered by an HTTP request made on the provisioned API Gateway REST API `/hello` route with `POST` method. The request body must be provided as `application/json`. The body structure is tested by API Gateway against `src/functions/hello/schema.ts` JSON-Schema definition: it must contain the `name` property.
-
-- requesting any other path than `/hello` with any other method than `POST` will result in API Gateway returning a `403` HTTP error code
-- sending a `POST` request to `/hello` with a payload **not** containing a string property named `name` will result in API Gateway returning a `400` HTTP error code
-- sending a `POST` request to `/hello` with a payload containing a string property named `name` will result in API Gateway returning a `200` HTTP status code with a message saluting the provided name and the detailed event processed by the lambda
-
-> :warning: As is, this template, once deployed, opens a **public** endpoint within your AWS account resources. Anybody with the URL can actively execute the API Gateway endpoint and the corresponding lambda. You should protect this endpoint with the authentication method of your choice.
-
-### Locally
-
-In order to test the hello function locally, run the following command:
-
-- `npx sls invoke local -f hello --path src/functions/hello/mock.json` if you're using NPM
-- `yarn sls invoke local -f hello --path src/functions/hello/mock.json` if you're using Yarn
-
-Check the [sls invoke local command documentation](https://www.serverless.com/framework/docs/providers/aws/cli-reference/invoke-local/) for more information.
-
-### Remotely
-
-Copy and replace your `url` - found in Serverless `deploy` command output - and `name` parameter in the following `curl` command in your terminal or in Postman to test your newly deployed application.
 
 ```
-curl --location --request POST 'https://myApiEndpoint/dev/hello' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "name": "Frederic"
-}'
-```
-
-## Template features
-
-### Project structure
-
-The project code base is mainly located within the `src` folder. This folder is divided in:
-
-- `functions` - containing code base and configuration for your lambda functions
-- `libs` - containing shared code base between your lambdas
-
-```
-.
-├── src
-│   ├── functions               # Lambda configuration and source code folder
-│   │   ├── hello
-│   │   │   ├── handler.ts      # `Hello` lambda source code
-│   │   │   ├── index.ts        # `Hello` lambda Serverless configuration
-│   │   │   ├── mock.json       # `Hello` lambda input parameter, if any, for local invocation
-│   │   │   └── schema.ts       # `Hello` lambda input event JSON-Schema
-│   │   │
-│   │   └── index.ts            # Import/export of all lambda configurations
-│   │
-│   └── libs                    # Lambda shared code
-│       └── apiGateway.ts       # API Gateway specific helpers
-│       └── handlerResolver.ts  # Sharable library for resolving lambda handlers
-│       └── lambda.ts           # Lambda middleware
+src/
 │
-├── package.json
-├── serverless.ts               # Serverless service file
-├── tsconfig.json               # Typescript compiler configuration
-├── tsconfig.paths.json         # Typescript paths
-└── webpack.config.js           # Webpack configuration
+├──── functions/
+│   ├──── auth/
+│   │   ├──── login/ # Function for user authentication
+│   │   ├──── register/ # Function for registering a new user
+│   │   └──── ... # Other authentication and authorization functions
+│   │
+│   ├──── tasks/
+│   │   ├──── create/ # Function for creating a new task
+│   │   ├──── delete/ # Function for deleting a task
+│   │   ├──── get/ # Function for retrieving a list of tasks
+│   │   ├──── update/ # Function for updating a task
+│   │   └──── ... # Other functions for managing tasks
+│   │
+│   └──── ... # Other project functions
+│
+├──── libs/ # Helper libraries and utilities
+│   ├──── api-gateway.ts # Utilities for working with API Gateway
+│   ├──── handler-resolver.ts # Utilities for resolving handler path
+│   └──── ... # Other helper utilities
+│
+└──── infrastructure/ # Modules for working with infrastructure (databases, authentication, etc.)
+├──── cognito.ts # Module for working with AWS Cognito
+├──── database.ts # Module for working with databases (DynamoDB, AWS DocumentDB)
+└──── ... # Other modules for working with infrastructure
 ```
 
-### 3rd party libraries
 
-- [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts) - uses JSON-Schema definitions used by API Gateway for HTTP request validation to statically generate TypeScript types in your lambda's handler code base
-- [middy](https://github.com/middyjs/middy) - middleware engine for Node.Js lambda. This template uses [http-json-body-parser](https://github.com/middyjs/middy/tree/master/packages/http-json-body-parser) to convert API Gateway `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object
-- [@serverless/typescript](https://github.com/serverless/typescript) - provides up-to-date TypeScript definitions for your `serverless.ts` service file
+### Other Mentioned Technologies and Practices
 
-### Advanced usage
+- **TDD (Test-Driven Development)**: Testing is employed in the project to ensure the correct functionality of functions and APIs.
+- **DDD (Domain-Driven Design)**: While there is no direct mention of DDD in the project, its principles can be applied in designing and developing task management functionality.
+- **Conventional Commits**: It is assumed that Conventional Commits-style commit message conventions are used to support automatic Changelog generation and version management.
 
-Any tsconfig.json can be used, but if you do, set the environment variable `TS_NODE_CONFIG` for building the application, eg `TS_NODE_CONFIG=./tsconfig.app.json npx serverless webpack`
+This repository provides an example implementation of a RESTful API using AWS Lambda serverless functions, TypeScript, and a variety of other technologies that adhere to modern Node.js development standards.
+
+### Running Tests
+
+If the project includes test suites, you can provide instructions on how to run them. For example:
+
+```bash
+# Install development dependencies
+npm install --dev
+
+# Run tests
+npm test
+```
+
+### Contributing
+
+Contributions are welcome and encouraged! Here's how you can contribute:
+
+1. Fork the repository and clone it to your local machine.
+2. Create a new branch for your feature or bug fix: `git checkout -b feature/new-feature`.
+3. Make your changes and ensure that the tests pass.
+4. Commit your changes following the [Conventional Commits](https://www.conventionalcommits.org/) format.
+5. Push your changes to your fork: `git push origin feature/new-feature`.
+6. Submit a pull request to the `main` branch of the original repository.
+
+Thank you for considering contributing to the project!
