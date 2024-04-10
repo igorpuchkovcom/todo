@@ -13,7 +13,6 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@functions/*": ["src/functions/*"],
       "@interfaces/*": ["src/interfaces/*"]
     }
   },

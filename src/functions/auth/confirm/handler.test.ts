@@ -14,8 +14,6 @@ const event: APIGatewayProxyEvent = {
     path: '/auth/confirm',
 } as unknown as APIGatewayProxyEvent;
 
-
-
 describe('confirmUserHandler', () => {
     it('should confirm user successfully', async () => {
         event.body = JSON.stringify({
