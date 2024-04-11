@@ -17,14 +17,12 @@ describe('Get Tasks API Endpoint', () => {
 
         // Check for successful response
         expect(response.status).toEqual(200);
-        console.log('Response body:', response.body); // Add this line for debugging
 
         // Check that the response body is not empty
         expect(response.body).not.toEqual('');
 
         // Decode the 'tasks' string from JSON
         const tasks = response.body;
-        console.log('Decoded tasks:', tasks); // Add this line for debugging
 
         // Check that tasks is an array
         expect(Array.isArray(tasks)).toBeTruthy();

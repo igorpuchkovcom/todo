@@ -1,4 +1,3 @@
-const serverless = require('serverless-http');
 import express, {Request, Response} from 'express';
 import {confirmUser} from '../../../infrastructure/cognito';
 
@@ -19,5 +18,3 @@ app.post('/auth/confirm', async (req: Request, res: Response) => {
         res.status(500).json({error: error.message});
     }
 });
-
-export const confirmHandler = serverless(app);
