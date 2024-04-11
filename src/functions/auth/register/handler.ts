@@ -1,23 +1,20 @@
-import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {registerUser} from '../../../infrastructure/cognito';
-import {formatJSONResponse} from '../../../libs/api-gateway';
-import {handleError} from '../../../helpers';
+import express, {Request, Response} from 'express';
+import {json} from 'body-parser';
+import serverless from "serverless-http";
+import {Handler} from "aws-lambda";
 
-export const registerHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const app = express();
+app.use(json());
+
+app.post('/auth/register', async (req: Request, res: Response) => {
+    const {username, email, password} = req.body;
     try {
-        // Получаем параметры из запроса
-        const requestBody = JSON.parse(event.body);
-        const {username, email, password} = requestBody;
-
-        // Регистрируем пользователя в Cognito
         const result = await registerUser(username, email, password);
-
-        // Возвращаем успешный ответ
-        return formatJSONResponse(result, 200);
+        res.json(result);
     } catch (error) {
-        // Обрабатываем ошибку подтверждения
-        return handleError(error);
+        res.status(500).json({error: error.message});
     }
-};
+});
 
-export const main = registerHandler;
+export const registerHandler: Handler = serverless(app);

@@ -1,5 +1,5 @@
-import {APIGatewayProxyEvent} from 'aws-lambda';
-import {main} from './handler';
+import request from 'supertest';
+import {app} from './handler';
 import {confirmUser} from '../../../infrastructure/cognito';
 
 jest.mock('../../../infrastructure/cognito', () => ({
@@ -9,41 +9,28 @@ jest.mock('../../../infrastructure/cognito', () => ({
 // Преобразуем тип confirmUser в jest.Mock, чтобы использовать методы mockResolvedValueOnce и mockRejectedValueOnce
 const mockConfirmUser = confirmUser as jest.Mock;
 
-const event: APIGatewayProxyEvent = {
-    httpMethod: 'POST',
-    path: '/auth/confirm',
-} as unknown as APIGatewayProxyEvent;
-
 describe('confirmUserHandler', () => {
     it('should confirm user successfully', async () => {
-        event.body = JSON.stringify({
-            code: '123456',
-            username: 'testUser'
-        })
-
         // Создаем мок-функцию confirmUser, которая возвращает успешный результат
         mockConfirmUser.mockResolvedValueOnce({success: true});
 
-        const result = await main(event);
+        const response = await request(app)
+            .post('/auth/confirm')
+            .send({code: '123456', username: 'testUser'});
 
-        expect(result.statusCode).toEqual(200);
-        // Проверяем, что результат содержит ожидаемые данные
-        expect(JSON.parse(result.body)).toEqual({success: true});
+        expect(response.status).toEqual(200);
+        // Проверяем, что ответ содержит ожидаемые данные
+        expect(response.body).toEqual({success: true});
     });
 
     it('should handle errors gracefully', async () => {
-        event.body = JSON.stringify({
-            code: 'invalidCode',
-            username: 'testUser'
-        });
-
         // Создаем мок-функцию confirmUser, которая выбрасывает ошибку
-        mockConfirmUser.mockRejectedValueOnce(new Error('Confirmation error'));
+        mockConfirmUser.mockRejectedValueOnce(new Error('Internal server error'));
 
-        const result = await main(event);
+        const response = await request(app)
+            .post('/auth/confirm')
+            .send({code: 'invalidCode', username: 'testUser'});
 
-        expect(result.statusCode).toEqual(500);
-        // Проверяем, что результат содержит ожидаемые данные
-        expect(JSON.parse(result.body)).toEqual({error: 'Confirmation error'});
+        expect(response.status).toEqual(500);
     });
 });

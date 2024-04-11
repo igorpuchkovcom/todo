@@ -1,24 +1,23 @@
-import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
+const serverless = require('serverless-http');
+import express, {Request, Response} from 'express';
 import {confirmUser} from '../../../infrastructure/cognito';
-import {handleError} from '../../../helpers';
-import {formatJSONResponse} from "../../../libs/api-gateway";
 
-// Обработчик для подтверждения пользователя
-export const confirmUserHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const app = express();
+app.use(express.json());
+
+app.post('/auth/confirm', async (req: Request, res: Response) => {
     try {
-        // Получаем параметры из запроса
-        const requestBody = JSON.parse(event.body);
-        const {code, username} = requestBody;
+        const {code, username} = req.body;
 
-        // Подтверждаем пользователя в Cognito
+        // Confirming user in Cognito
         const result = await confirmUser(code, username);
 
-        // Возвращаем успешный ответ
-        return formatJSONResponse(result, 200);
+        // Returning successful response
+        res.status(200).json(result);
     } catch (error) {
-        // Обрабатываем ошибку подтверждения
-        return handleError(error);
+        // Handling confirmation error
+        res.status(500).json({error: error.message});
     }
-};
+});
 
-export const main = confirmUserHandler;
+export const confirmHandler = serverless(app);

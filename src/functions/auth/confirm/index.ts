@@ -1,13 +1,13 @@
-import { handlerPath } from '../../../libs/handler-resolver';
+import {handlerPath} from '../../../libs/handler-resolver';
 
 export default {
-    handler: `${handlerPath(__dirname)}/handler.main`,
+    handler: `${handlerPath(__dirname)}/handler.app`,
     events: [
         {
             http: {
                 method: 'post',
-                path: 'auth/confirm'
+                path: '/auth/confirm'
             },
         },
     ],
-};
+}

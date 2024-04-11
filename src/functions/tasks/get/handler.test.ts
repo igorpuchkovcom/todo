@@ -1,47 +1,38 @@
-import {main} from './handler';
-import {APIGatewayProxyEvent} from 'aws-lambda';
-import {getAllTasksFromDatabase} from '../../../infrastructure/database';
+import request from 'supertest'; // Импортируем supertest для отправки запросов к приложению Express
+import {app} from './handler'; // Импортируем обработчик Express
 
 // Mock the database module
 jest.mock('../../../infrastructure/database', () => ({
-    getAllTasksFromDatabase: jest.fn()
+    getAllTasksFromDatabase: jest.fn().mockResolvedValue([
+        {id: '1', title: 'Task 1', description: 'Description for Task 1'},
+        {id: '2', title: 'Task 2', description: 'Description for Task 2'}
+    ])
 }));
 
 describe('Get Tasks API Endpoint', () => {
     it('should return list of tasks', async () => {
-        // Mocked tasks data
-        const mockedTasks = [
+        // Send a GET request to the Express app
+        const response = await request(app)
+            .get('/tasks/get');
+
+        // Check for successful response
+        expect(response.status).toEqual(200);
+        console.log('Response body:', response.body); // Add this line for debugging
+
+        // Check that the response body is not empty
+        expect(response.body).not.toEqual('');
+
+        // Decode the 'tasks' string from JSON
+        const tasks = response.body;
+        console.log('Decoded tasks:', tasks); // Add this line for debugging
+
+        // Check that tasks is an array
+        expect(Array.isArray(tasks)).toBeTruthy();
+
+        // Check if the returned tasks match the mocked tasks
+        expect(tasks).toEqual([
             {id: '1', title: 'Task 1', description: 'Description for Task 1'},
             {id: '2', title: 'Task 2', description: 'Description for Task 2'}
-        ];
-
-        // Mock the implementation of getAllTasksFromDatabase
-        (getAllTasksFromDatabase as jest.Mock).mockResolvedValue(mockedTasks);
-
-        // Тестовые данные для запроса списка задач
-        const event: APIGatewayProxyEvent = {
-            httpMethod: 'GET',
-            path: '/tasks/get',
-        } as unknown as APIGatewayProxyEvent;
-
-        const response = await main(event);
-
-        // Проверка успешного ответа
-        expect(response.statusCode).toEqual(200);
-        expect(typeof response.body).toEqual('string');
-        const responseBody = JSON.parse(response.body);
-
-        // Проверка наличия задач в объекте ответа
-        expect(responseBody).toBeTruthy();
-        expect(typeof responseBody).toEqual('object'); // Check that responseBody is an object
-
-        // Проходим по всем ключам в объекте и проверяем, что они содержат задачи
-        const tasksArray = Object.values(responseBody);
-        expect(Array.isArray(tasksArray)).toBeTruthy();
-        tasksArray.forEach((task: any) => {
-            expect(task).toHaveProperty('id');
-            expect(task).toHaveProperty('title');
-            expect(task).toHaveProperty('description');
-        });
+        ]);
     });
 });

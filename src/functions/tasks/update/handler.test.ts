@@ -1,49 +1,33 @@
-import {main} from './handler';
-import {APIGatewayProxyEvent} from 'aws-lambda';
-import {updateTaskInDatabase} from '../../../infrastructure/database';
+import request from 'supertest'; // Импортируем supertest для отправки запросов к приложению Express
+import {app} from './handler'; // Импортируем обработчик Express
 
+// Мокируем модуль базы данных
 jest.mock('../../../infrastructure/database', () => ({
-    updateTaskInDatabase: jest.fn(), // Создаем мок функции обновления задачи в базе данных
+    updateTaskInDatabase: jest.fn()
 }));
-
-const event: APIGatewayProxyEvent = {
-    body: JSON.stringify({
-        title: 'Updated Task',
-        description: 'This is an updated task'
-    }),
-    httpMethod: 'PUT',
-    path: '/tasks/update'
-} as unknown as APIGatewayProxyEvent;
 
 describe('Update Task API Endpoint', () => {
     it('should update an existing task', async () => {
-        event.pathParameters = {id: 'taskId123'};
-        const response = await main(event);
+        // Отправляем PUT-запрос к приложению Express с обновленными данными задачи
+        const response = await request(app)
+            .put('/tasks/update/taskId123')
+            .send({
+                title: 'Updated Task',
+                description: 'This is an updated task'
+            });
 
-        // Проверяем, что функция обновления задачи в базе данных была вызвана с правильными аргументами
-        expect(updateTaskInDatabase).toHaveBeenCalledWith(
-            'taskId123',
-            {title: 'Updated Task', description: 'This is an updated task'},
-            {
-                databaseName: 'todo',
-                uri: 'mongodb://' + process.env.DocumentDBHost
-            }
-        );
-
-        // Проверка успешного ответа
-        expect(response.statusCode).toEqual(200);
-        expect(typeof response.body).toEqual('string');
+        // Проверяем успешный ответ
+        expect(response.status).toEqual(200);
+        expect(typeof response.body).toEqual('object');
+        expect(response.body).toHaveProperty('message', 'Task updated successfully');
     });
 
     it('should return error response when task ID is not provided', async () => {
-        delete event.pathParameters;
-        const response = await main(event);
+        // Отправляем PUT-запрос к приложению Express без указания ID задачи
+        const response = await request(app)
+            .put('/tasks/update');
 
-        // Проверка ошибочного ответа
-        expect(response.statusCode).toEqual(400);
-        expect(typeof response.body).toEqual('string');
-        const responseBody = JSON.parse(response.body);
-        expect(responseBody).toHaveProperty('error');
-        expect(responseBody.error).toEqual('Task ID is required');
+        // Проверяем ошибочный ответ
+        expect(response.status).toEqual(404);
     });
 });

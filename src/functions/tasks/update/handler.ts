@@ -1,39 +1,17 @@
-import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
-import {formatJSONResponse} from '../../../libs/api-gateway';
 import {updateTaskInDatabase} from '../../../infrastructure/database';
 import config from '../../../../config/database-config';
-import {Task} from '@interfaces/task';
+import express, {json, Request, Response} from 'express';
 
-// Функция для обновления задачи
-const updateTaskHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // Получение идентификатора задачи из параметров пути
-    const taskId = event.pathParameters?.id;
+export const app = express();
+app.use(json());
 
-    // Проверка наличия идентификатора задачи
-    if (!taskId) {
-        return formatJSONResponse({error: 'Task ID is required'}, 400);
-    }
-
-    // Парсинг тела запроса для получения новых данных задачи
-    const requestBody = JSON.parse(event.body);
-    const {title, description} = requestBody;
-
-    // Проверка наличия новых данных для задачи
-    if (!title || !description) {
-        return formatJSONResponse({error: 'Missing required fields'}, 400);
-    }
-
+app.put('/tasks/update/:id', async (req: Request, res: Response) => {
+    const taskId = req.params.id;
+    const {title, description} = req.body;
     try {
-        // Обновление задачи в базе данных
         await updateTaskInDatabase(taskId, {title, description}, config);
-
-        // Возвращаем успешный ответ с обновленными данными задачи
-        const updatedTask: Task = {id: taskId, title, description};
-        return formatJSONResponse({task: updatedTask}, 200);
+        res.status(200).json({message: 'Task updated successfully'});
     } catch (error) {
-        // Возвращаем ошибку сервера
-        return formatJSONResponse({error: 'Internal server error'}, 500);
+        res.status(500).json({error: error.message});
     }
-};
-
-export const main = updateTaskHandler;
+});

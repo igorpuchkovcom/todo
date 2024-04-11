@@ -7,6 +7,7 @@ This project is an API for task management using AWS Lambda serverless functions
 - **Node.js**: JavaScript runtime environment used for writing server-side code.
 - **TypeScript**: Programming language adding static typing to JavaScript.
 - **Serverless Framework**: Framework for developing, deploying, and managing serverless applications on AWS, Azure, Google Cloud, and other platforms.
+- **Express.js**: Fast, unopinionated, minimalist web framework for Node.js used for handling HTTP requests and responses.
 - **AWS (Amazon Web Services)**:
     - **AWS Lambda**: Serverless compute service for running code in response to events.
     - **AWS API Gateway**: Service for managing, publishing, securing, and monitoring API interfaces.

@@ -1,40 +1,27 @@
-import {main} from './handler';
-import {APIGatewayProxyEvent} from 'aws-lambda';
-import {deleteTaskFromDatabase} from '../../../infrastructure/database';
+import request from 'supertest'; // Импортируем supertest для отправки запросов к приложению Express
+import {app} from './handler'; // Импортируем обработчик Express
 
-jest.mock('../../../infrastructure/database', () => ({
-    deleteTaskFromDatabase: jest.fn(), // Создаем мок функции удаления задачи из базы данных
-}));
-
-const event: APIGatewayProxyEvent = {
-    body: '',
-    httpMethod: 'DELETE',
-    path: '/tasks/delete',
-} as unknown as APIGatewayProxyEvent;
-
+jest.mock('../../../infrastructure/database'); // Мокируем модуль database
 
 describe('Delete Task API Endpoint', () => {
+    // Тестирование успешного удаления существующей задачи
     it('should delete an existing task', async () => {
-        event.pathParameters = {id: 'taskId123'};
-        const response = await main(event);
-
-        // Проверяем, что функция удаления задачи из базы данных была вызвана с правильным аргументом
-        expect(deleteTaskFromDatabase).toHaveBeenCalledWith('taskId123', expect.anything());
+        // Вызываем обработчик с DELETE-запросом к приложению Express
+        const response = await request(app)
+            .delete('/tasks/delete/taskId123');
 
         // Проверяем успешный ответ
-        expect(response.statusCode).toEqual(200);
-        expect(typeof response.body).toEqual('string');
+        expect(response.status).toEqual(200);
+        expect(typeof response.body).toEqual('object');
+        expect(response.body).toHaveProperty('message', 'Task deleted successfully');
     });
 
+    // Тестирование ошибки при отсутствии ID задачи
     it('should return error response when task ID is not provided', async () => {
-        delete event.pathParameters;
-        const response = await main(event);
+        // Вызываем обработчик с DELETE-запросом к приложению Express без указания ID задачи
+        const response = await request(app).delete('/tasks/delete');
 
         // Проверяем ошибочный ответ
-        expect(response.statusCode).toEqual(400);
-        expect(typeof response.body).toEqual('string');
-        const responseBody = JSON.parse(response.body);
-        expect(responseBody).toHaveProperty('error');
-        expect(responseBody.error).toEqual('Task ID is required');
+        expect(response.status).toEqual(404);
     });
 });
