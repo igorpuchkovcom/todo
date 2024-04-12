@@ -2,7 +2,7 @@
   "info": {
     "name": "ToDo API Collection",
     "description": "ToDo API Collection",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
@@ -20,7 +20,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"u1@puchkov.com\",\n    \"password\": \"password123\",\n    \"email\": \"u1@puchkov.com\"\n}"
+              "raw": "{\n    \"username\": \"u1@puchkov.com\",\n    \"password\": \"P@ssword123\",\n    \"email\": \"u1@puchkov.com\"\n}"
             },
             "url": {
               "raw": "{{ServiceEndpoint}}/auth/register",
@@ -47,7 +47,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"u1@puchkov.com\",\n    \"password\": \"password123\"\n}"
+              "raw": "{\n    \"email\": \"u1@puchkov.com\",\n    \"username\": \"u1@puchkov.com\",\n    \"password\": \"P@ssword123\"\n}"
             },
             "url": {
               "raw": "{{ServiceEndpoint}}/auth/login",
@@ -198,33 +198,43 @@
           },
           "response": []
         }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "eyJraWQiOiJtZG51YVwvUFh3VVlyYUY2M3R5cVJ1a3A0R0xSaVh6eTVnWlJGajdUM0VWRT0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI5NGM4NDQ3OC1mMGMxLTcwNmEtOGVmZS0yN2QyNWFlMzExZWMiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9DSmlYQjVaU0UiLCJjbGllbnRfaWQiOiI0N21lb2gwazFzN2gyOGI3OTU2b2tvbjA2byIsIm9yaWdpbl9qdGkiOiJlMWVlZjc3My1iODMyLTQ5MGUtOGMwZS02MDM4ZWJhYTgxMzMiLCJldmVudF9pZCI6IjY3M2Y2OTFmLTQ1NzAtNDk0ZS1hOTE3LWYxOWYwNDU4OTVhZiIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE3MTI4OTQwMDQsImV4cCI6MTcxMjg5NzYwNCwiaWF0IjoxNzEyODk0MDA0LCJqdGkiOiJlYjUyZTIzNC0yNjViLTRkY2EtYjlkZC1hNTRlM2M1YzkxY2EiLCJ1c2VybmFtZSI6Ijk0Yzg0NDc4LWYwYzEtNzA2YS04ZWZlLTI3ZDI1YWUzMTFlYyJ9.E1ET1i6au6sB3dWam3XNLzy-OICVmTl7QstD34oTu4h1V0JLwFtEqjnLnra0QQJuIgS21mbV3_Qr24juY4ltN7AQ43E4OnIXZrRzRgElR11gpg1dBVQbgR76pzqr_gvRPpf4KenOtdxrHoeyF3ODCWpzg1HgEarvCzf6RvnBpKFnD2CXm3XTzJExhJUIxWTtYIG30D0Dwqk-JpUHJXeSxbe5BnYSWPeW7_vb5mwrxX4IsoscJLmg2SZaGA3Mzr5etXQtL7t3iNVWkQRc7AlWZzHjCzBacFz4LdGCE956FxxFMRb7cBju1blbao9iyCV-4GdEaiATy1tT-UxgzlfljQ",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ],
+      "variable": [
+        {
+          "key": "ServiceEndpoint",
+          "value": ""
+        }
       ]
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [
-          ""
-        ]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [
-          ""
-        ]
-      }
-    }
-  ],
-  "variable": [
-    {
-      "key": "ServiceEndpoint",
-      "value": ""
     }
   ]
 }
