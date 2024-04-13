@@ -33,7 +33,22 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Test for successful user registration",
+                  "pm.test(\"Register User - Success\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.response.to.have.jsonBody('message', 'User registered successfully');",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Login User",
@@ -60,7 +75,22 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Test for successful user login",
+                  "pm.test(\"Login User - Success\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.response.to.have.jsonBody('token');",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Confirm User",
@@ -87,7 +117,22 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Test for successful user confirmation",
+                  "pm.test(\"Confirm User - Success\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.response.to.have.jsonBody('message', 'User confirmed successfully');",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -119,7 +164,22 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Test for successful task creation",
+                  "pm.test(\"Create Task - Success\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.response.to.have.jsonBody('message', 'Task created successfully');",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Delete Task",
@@ -146,7 +206,22 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Test for successful task deletion",
+                  "pm.test(\"Delete Task - Success\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.response.to.have.jsonBody('message', 'Task deleted successfully');",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Get Tasks",
@@ -169,7 +244,22 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Test for successful fetching of tasks",
+                  "pm.test(\"Get Tasks - Success\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.response.to.have.jsonBody('tasks');",
+                  "});"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "Update Task",
@@ -196,7 +286,22 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Test for successful task update",
+                  "pm.test(\"Update Task - Success\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.response.to.have.jsonBody('message', 'Task updated successfully');",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ],
       "auth": {
@@ -209,26 +314,6 @@
           }
         ]
       },
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              ""
-            ]
-          }
-        },
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              ""
-            ]
-          }
-        }
-      ],
       "variable": [
         {
           "key": "ServiceEndpoint",
